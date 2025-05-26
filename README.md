@@ -19,8 +19,8 @@ Contact: [wuyang.li@epfl.ch](mailto:wuyang.li@epfl.ch)
 *VoxDet* address SSC with an instance-centric formulation inspried by dense object detection, which uses a *Voxel-to-Instance (VoxNT)* trick freely transferring voxel-level class labels to instance-level offset labels. More details can be found in our [[Project Page]](https://vita-epfl.github.io/VoxDet/).
 
 - Versatile: Adaptable to various voxel-based scenarios, such as camera and LiDAR applications.
-- Powerful Achieves state-of-the-art on both camera-based and LiDAR-based SSC benchmarks.
-- Efficient: Fast (~1.3 speed-up) and lightweight (reducing ~57.9 parameters).
+- Powerful: Achieves state-of-the-art on both camera-based and LiDAR-based SSC benchmarks.
+- Efficient: Fast (~1.3× speed-up) and lightweight (reducing ~57.9% parameters).
 - Leaderboard Topper: Achieving 63.0 IoU (single-frame model), securing 1st place on the SemanticKITTI leaderboard.
 
 
