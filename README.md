@@ -4,17 +4,15 @@
 
 📌 This is an official PyTorch implementation of the work:
 
-> [**VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection**]() `<br>`
-> [Wuyang Li `<sup>`1 `</sup>`](https://wymancv.github.io/wuyang.github.io/), [Zhu Yu `<sup>`2 `</sup>`](), [Alexandre Alahi `<sup>`1 `</sup>`](https://scholar.google.com/citations?user=UIhXQ64AAAAJ&hl=en) `<br><sup>`1 `</sup>` École Polytechnique Fédérale de Lausanne (EPFL); `<sup>`2 `</sup>` Zhejiang University
+> [**VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection**]() <br>
+> [Wuyang Li <sup>1 </sup>](https://wymancv.github.io/wuyang.github.io/), [Zhu Yu <sup>2 </sup>](), [Alexandre Alahi <sup>1 </sup>](https://scholar.google.com/citations?user=UIhXQ64AAAAJ&hl=en) <br><sup>1 </sup> École Polytechnique Fédérale de Lausanne (EPFL); <sup>2 </sup> Zhejiang University
 
 <div align="center">
     <img width="100%" alt="VoxDet overview" src="assets/introduction.png"/>
 </div>
 
 
-Code is coming soon! We’re currently cleaning up the code and unifying the camera- and LiDAR-based implementations into a single project, which serves as a powerful, clean, and extensible baseline model for the community.
-
-If you can’t wait for the official release, feel free to contact me for the individual implementations.
+***Code is coming soon! We’re currently cleaning up the code and unifying the camera- and LiDAR-based implementations into a single project, which serves as a powerful, clean, and extensible baseline model for the community. If you can’t wait for the official release, feel free to contact me for the individual implementations.***
 
 Contact: [wuyang.li@epfl.ch](mailto:wuyang.li@epfl.ch)
 
@@ -57,11 +55,11 @@ Greatly appreciate the tremendous effort for the following projects!
 
 If you think our work is helpful for your project, I would greatly appreciate it if you could consdier citing our work
 
-```bibtex
+bibtex
 @article{li2025voxdet,
   title={VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection},
   author={Li, Wuyang and Yu, Zhu and Alahi, Alexandre},
   journal={arXiv preprint},
   year={2025}
 }
-```
+
