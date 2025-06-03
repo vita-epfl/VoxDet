@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
 
-  <meta name="description"
-        content="VoxDet: Rethinking 3D Semantic Scene Completion as Dense Object Detection.">
+  <meta name="description" content="VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection.">
 
-  <meta name="keywords" content="X-GRM, 3DGS, CT Reconstruction">
+  <meta name="keywords" content="VoxDet, Semantic Occupancy Prediction,Dense Object Detection">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VoxDet: Rethinking 3D Semantic Scene Completion as Dense Object Detection</title>
+  <title>VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
@@ -24,15 +24,13 @@
     gtag('config', 'G-PYVRSFMDRL');
   </script>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/logo.png">
 
@@ -42,18 +40,22 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
 </head>
+
 <body>
 
 
   <style>
     /* --- 原有样式保留 --- */
-    .red-text { color: red; }
+    .red-text {
+      color: red;
+    }
 
     /* 容器样式：代替原来的 rotating-cube */
     #voxel-container {
       width: 100px;
       height: 100px;
-      margin: 0 auto 20px; /* 居中并与标题保持间距 */
+      margin: 0 auto 20px;
+      /* 居中并与标题保持间距 */
     }
 
     /* Three.js 渲染的 canvas 填满容器 */
@@ -64,453 +66,555 @@
     }
 
     /* 页面其余样式（摘自原示例） */
-    .hero { padding: 2rem 1rem; }
-    .hero-body { padding: 2rem 1rem; }
-    .container { max-width: 960px; margin: 0 auto; }
-    .columns { display: flex; justify-content: center; }
-    .column { flex: 0 0 auto; }
-    .has-text-centered { text-align: center; }
-    .title.is-2 { font-size: 2rem; margin-bottom: 0.5rem; }
-    .publication-title { line-height: 1.2; }
-    .is-size-4 { font-size: 1.25rem; }
-    .publication-authors .author-block { margin-right: 0.5rem; }
-    .publication-links { margin-top: 1rem; }
-    .link-block { margin: 0 0.25rem; }
-    .button { cursor: pointer; padding: 0.5em 1em; border-radius: 4px; border: none; color: #fff; background: #333; text-decoration: none; }
-    .button .icon { margin-right: 0.25em; }
+    .hero {
+      padding: 2rem 1rem;
+    }
+
+    .hero-body {
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .columns {
+      display: flex;
+      justify-content: center;
+    }
+
+    .column {
+      flex: 0 0 auto;
+    }
+
+    .has-text-centered {
+      text-align: center;
+    }
+
+    .title.is-2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .publication-title {
+      line-height: 1.2;
+    }
+
+    .is-size-4 {
+      font-size: 1.25rem;
+    }
+
+    .publication-authors .author-block {
+      margin-right: 0.5rem;
+    }
+
+    .publication-links {
+      margin-top: 1rem;
+    }
+
+    .link-block {
+      margin: 0 0.25rem;
+    }
+
+    .button {
+      cursor: pointer;
+      padding: 0.5em 1em;
+      border-radius: 4px;
+      border: none;
+      color: #fff;
+      background: #333;
+      text-decoration: none;
+    }
+
+    .button .icon {
+      margin-right: 0.25em;
+    }
   </style>
-</head>
-<body>
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container">
-        <div class="columns is-centered">
-          <div class="column has-text-centered">
+  </head>
 
-            <!-- 3D 体素容器（替换原 rotating-cube） -->
-            <div id="voxel-container"></div>
+  <body>
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
 
-            <!-- 标题 -->
-     <h1 class="title is-1 publication-title">
-  <span style="color:#036bfc">V</span><span style="color:#3503fc">o</span><span style="color:#a200ff">x</span><span style="color:#e250ff">Det</span>: Rethinking 3D Semantic Scene Completion as<br>Dense Object Detection
-</h1>
+              <!-- 3D 体素容器（替换原 rotating-cube） -->
+              <div id="voxel-container"></div>
 
-            <!-- 作者 -->
-            <div class="is-size-4 publication-authors">
-              <span class="author-block"><a href="https://wymancv.github.io/wuyang.github.io/">Wuyang Li</a><sup>1</sup>,</span>
-              <span class="author-block"><a href="#">Zhu Yu</a><sup>2</sup>,</span>
-              <span class="author-block"><a href="https://scholar.google.com/citations?user=UIhXQ64AAAAJ&hl=en">Alexandre Alahi</a><sup>1</sup>,</span>
+              <!-- 标题 -->
+              <h1 class="title is-1 publication-title">
+                <span style="color:#036bfc">V</span><span style="color:#3503fc">o</span><span
+                  style="color:#a200ff">x</span><span style="color:#e250ff">Det</span>: Rethinking 3D Semantic Scene
+                Completion as<br>Dense Object Detection
+              </h1>
+
+              <!-- 作者 -->
+              <div class="is-size-4 publication-authors">
+                <span class="author-block"><a href="https://wymancv.github.io/wuyang.github.io/">Wuyang
+                    Li</a><sup>1</sup>,</span>
+                <span class="author-block"><a href="#">Zhu Yu</a><sup>2</sup>,</span>
+                <span class="author-block"><a
+                    href="https://scholar.google.com/citations?user=UIhXQ64AAAAJ&hl=en">Alexandre
+                    Alahi</a><sup>1</sup>,</span>
+              </div>
+
+              <!-- 单位 -->
+              <div class="is-size-5 publication-authors">
+                <span class="author-block"><sup>1</sup><a href="https://www.epfl.ch/labs/vita/">VITA@EPFL</a>,</span>
+                <span class="author-block"><sup>2</sup>Zhejiang University</span>
+              </div>
+
+              <!-- 链接 -->
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="" class="button">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://github.com/vita-epfl/VoxDet" class="button">
+                    <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
+                  </a>
+                </span>
+              </div>
+
             </div>
-
-            <!-- 单位 -->
-            <div class="is-size-5 publication-authors">
-              <span class="author-block"><sup>1</sup><a href="https://www.epfl.ch/labs/vita/">VITA@EPFL</a>,</span>
-              <span class="author-block"><sup>2</sup>Zhejiang University</span>
-            </div>
-
-            <!-- 链接 -->
-            <div class="publication-links">
-              <span class="link-block">
-                <a href="" class="button">
-                  <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://github.com/vita-epfl/VoxDet" class="button">
-                  <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
-                </a>
-              </span>
-            </div>
-
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-<!-- https://github.com/vita-epfl/VoxDet -->
+    <!-- https://github.com/vita-epfl/VoxDet -->
 
 
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="text-align: center;">
-      <h2 class="title is-3">Too Long; Don't Read</h2>
-      <div class="hero-body" style="text-align: left;">
-        <p style="font-size: 18px;">
-         <strong>VoxDet</strong> address SSC with an instance-centric formulation inspried by dense object detection, which uses a Voxel-to-Instance (<strong>VoxNT</strong>) trick freely transferring voxel-level class labels to instance-level offset labels.
-        </p>
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body" style="text-align: center;">
+          <h2 class="title is-3">Too Long; Don't Read</h2>
+          <div class="hero-body" style="text-align: left;">
+            <p style="font-size: 18px;">
+              <strong>VoxDet</strong> address semantic occupancy prediction with an instance-centric formulation
+              inspried by dense object detection, which uses a Voxel-to-Instance (<strong>VoxNT</strong>) trick freely
+              transferring voxel-level class labels to instance-level offset labels.
+            </p>
+          </div>
+          <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <img src="./static/images/head.png" style="width:80%; height: auto; margin-top: -40px;" />
+          </div>
+        </div>
       </div>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <img src="./static/images/head.png" style="width:80%; height: auto; margin-top: -40px;" /> 
+    </section>
+
+
+
+
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body" style="text-align: center;">
+          <h2 class="title is-3">Key Features</h2>
+          <div class="hero-body" style="text-align: left;">
+            <p style="font-size: 18px;">
+            <ul style="text-align: left; margin: 0 auto; display: inline-block;font-size: 18px; ">
+              <li><strong>Versatile:</strong> Adaptable to various voxel-based scenarios, such as <a class="red-text">
+                  camera and LiDAR</a> settings.</li>
+              <li><strong>Powerful:</strong> Achieve <a class="red-text">joint state-of-the-art</a> on camera-based and
+                LiDAR-based SSC benchmarks.</li>
+              <li><strong>Efficient:</strong> <a class="red-text">Fast</a> (~1.3× speed-up) and <a
+                  class="red-text">lightweight</a> (reducing ~57.9% parameters).</li>
+              <li><strong>Leaderboard Topper:</strong> Achieve <a class="red-text">63.0 IoU</a> (single-frame &
+                single-model & no extra
+                data/labels), securing <a class="red-text">1st</a> place on the <a
+                  href="https://codalab.lisn.upsaclay.fr/competitions/7170#results">SemanticKITTI leaderboard</a>.</li>
+            </ul>
+            </p>
+          </div>
+          <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <img src="./static/images/feature.png" style="width:80%; height: auto; margin-top: -40px;" />
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
 
 
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body" style="text-align: center;">
+          <h2 class="title is-3">Observation: Free Lunch in Voxel Labels</h2>
+          <div class="hero-body" style="text-align: left;">
+            <p style="font-size: 18px;">
+              <strong>Free Lunch:</strong> Voxel-level class labels inherently provide instance-level insights, which
+              have been overlooked by the community. Specifically, <a class="red-text">when only class labels (and
+                not instance labels) are available</a> <br>
+              <strong>Left:</strong> Pixel-level class labels <a class="red-text">fail</a> to discover or
+              regress instances due to 2D occlusion. <br>
+              <strong>Right:</strong> Voxel-level class labels <a class="red-text">can</a> discover and
+              regress instances thanks to their occlusion-free nature in 3D. <br>
 
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="text-align: center;">
-      <h2 class="title is-3">Key Features</h2>
-      <div class="hero-body" style="text-align: left;">
-        <p style="font-size: 18px;">
-      <ul style="text-align: left; margin: 0 auto; display: inline-block;font-size: 18px; "> 
-        <li><strong>Versatile:</strong> Adaptable to various voxel-based scenarios, such as camera and LiDAR settings.</li>
-        <li><strong>Powerful:</strong> Achieves state-of-the-art on both camera-based and LiDAR-based SSC benchmarks.</li>
-        <li><strong>Efficient:</strong> Fast (~1.3× speed-up) and lightweight (reducing ~57.9% parameters).</li>
-        <li><strong>Leaderboard Topper:</strong> Achieving 63.0 IoU (single-frame & single-model & no extra data/labels), securing 1st place on the          <a href="https://codalab.lisn.upsaclay.fr/competitions/7170#results">SemanticKITTI leaderboard</a>.</li>
-      </ul>
-        </p>
+            </p>
+          </div>
+          <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <img src="./static/images/motivation.png" style="width:80%; height: auto; margin-top: -40px;" />
+          </div>
+        </div>
       </div>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <img src="./static/images/feature.png" style="width:80%; height: auto; margin-top: -40px;" /> 
+    </section>
+
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body" style="text-align: center;">
+          <h2 class="title is-3">VoxNT Trick: Generate Free Offset Labels</h2>
+          <div class="hero-body" style="text-align: left;">
+            <p style="font-size: 18px;">
+              <strong>VoxNT</strong> trick can freely transfer the voxel-level class labels to the instance-level offset
+              labels by fully utilizing the observed free lunch mentioned above, which densely scans across 6 directions
+              (x⁺, x⁻, y⁺, y⁻, z⁺, z⁻) and stops when the voxel label changes, indicating approaching object borders.
+              <br>
+            </p>
+          </div>
+          <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <img src="./static/images/VItrick.png" style="width:90%; height: auto; margin-top: -40px;" />
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
 
 
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="text-align: center;">
-      <h2 class="title is-3">Observation: Free Lunch in Voxel Labels</h2>
-      <div class="hero-body" style="text-align: left;">
-        <p style="font-size: 18px;">
-      <strong>Free Lunch:</strong> Voxel-level class labels inherently provide instance-level insights, which have been overlooked by the community. Specifically, <strong class="red-text">when only class labels (and not instance labels) are available</strong> <br>
-      <strong>Left:</strong> Pixel-level class labels <strong class="red-text">fail</strong> to discover or regress instances due to 2D occlusion. <br>
-      <strong>Right:</strong> Voxel-level class labels <strong class="red-text">can</strong> discover and regress instances thanks to their occlusion-free nature in 3D. <br>
-                
-        </p>
+
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body" style="text-align: center;">
+          <h2 class="title is-3">VoxDet: Fully Using the Generated Free Offset Labels</h2>
+          <div class="hero-body" style="text-align: left;">
+            <p style="font-size: 18px;">
+              <strong>VoxDet</strong> reformulates the voxel-level SSC as dense object detection to achieve
+              instance-centric learning, which decouples it into two sub-tasks: offset regression and semantic
+              prediction. This is based on the generated offset labels from the <strong>VoxNT</strong> trick.
+              <br>
+            </p>
+          </div>
+          <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <img src="./static/images/overall.png" style="width:90%; height: auto; margin-top: -40px;" />
+          </div>
+        </div>
       </div>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <img src="./static/images/motivation.png" style="width:80%; height: auto; margin-top: -40px;" /> 
+    </section>
+
+
+
+
+
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body" style="text-align: center;">
+          <h2 class="title is-3">Qualitative Comparison</h2>
+          <div class="hero-body" style="text-align: left;">
+            <!-- <p style="font-size: 18px;"> -->
+            <!-- VoxDet reformulates the voxel-level SSC as dense object detection to achieve instance-centric learning, which decouples it into two sub-tasks: offset regression and semantic prediction. This is based on the generated offset labels from VoxNT trick. -->
+            <!-- <br> -->
+            </p>
+          </div>
+          <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <img src="./static/images/comparison.png" style="width:90%; height: auto; margin-top: -40px;" />
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="text-align: center;">
-      <h2 class="title is-3">VoxNT Trick: Generate Free Offset Labels</h2>
-      <div class="hero-body" style="text-align: left;">
-        <p style="font-size: 18px;">
-          <strong>VoxNT</strong> trick can freely transfer the voxel-level class labels to the instance-level offset labels by fully utilizing the observed free lunch mentioned above, which densely scans across 6 directions (x⁺, x⁻, y⁺, y⁻, z⁺, z⁻) and stops when the voxel label changes. This can be seen as the 3D version of FCOS object detector.  
-          <br>
-        </p>
-      </div>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <img src="./static/images/VItrick.png" style="width:90%; height: auto; margin-top: -40px;" /> 
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
 
 
 
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="text-align: center;">
-      <h2 class="title is-3">VoxDet: Learn with Free Labels</h2>
-      <div class="hero-body" style="text-align: left;">
-        <p style="font-size: 18px;">
-      <strong>VoxDet</strong> reformulates the voxel-level SSC as dense object detection to achieve instance-centric learning, which decouples it into two sub-tasks: offset regression and semantic prediction. This is based on the generated offset labels from the <strong>VoxNT</strong> trick.
-          <br>
-        </p>
-      </div>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <img src="./static/images/overall.png" style="width:90%; height: auto; margin-top: -40px;" /> 
-      </div>
-    </div>
-  </div>
-</section>
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body" style="text-align: center;">
+          <h2 class="title is-3">Camera/LiDAR-based SSC Benchmarks</h2>
+          <div class="hero-body" style="text-align: left;">
+            <p style="font-size: 18px;">
+              <strong>VoxDet</strong> achieves state-of-the-art performance on the camera-based SSC benchmarks,
+              including SemanticKITTI and KITTI360 (the first and second tables), and LiDAR-based SSC benchmarks (the
+              third table).
+              <br>
+            </p>
+          </div>
+          <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <img src="./static/images/semantickitti_camera.png" style="width:90%; height: auto; margin-top: -40px;" />
 
+          </div>
+          <div style="display: flex; justify-content: center; margin-top: 0px;">
+            <img src="./static/images/kitti360.png" width="90%" />
+          </div>
 
-
-
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="text-align: center;">
-      <h2 class="title is-3">Qualitative Comparison</h2>
-      <div class="hero-body" style="text-align: left;">
-        <!-- <p style="font-size: 18px;"> -->
-          <!-- VoxDet reformulates the voxel-level SSC as dense object detection to achieve instance-centric learning, which decouples it into two sub-tasks: offset regression and semantic prediction. This is based on the generated offset labels from VoxNT trick. -->
-          <!-- <br> -->
-        </p>
-      </div>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <img src="./static/images/comparison.png" style="width:90%; height: auto; margin-top: -40px;" /> 
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="text-align: center;">
-      <h2 class="title is-3">Camera/LiDAR-based SSC Benchmarks</h2>
-      <div class="hero-body" style="text-align: left;">
-        <p style="font-size: 18px;">
-  <strong>VoxDet</strong> achieves state-of-the-art performance on the camera-based SSC benchmarks, including SemanticKITTI and KITTI360 (the first and second tables), and LiDAR-based SSC benchmarks (the third table).
-          <br>
-        </p>
-      </div>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <img src="./static/images/semantickitti_camera.png" style="width:90%; height: auto; margin-top: -40px;" /> 
-        
-      </div>
-      <div style="display: flex; justify-content: center; margin-top: 0px;">
-        <img src="./static/images/kitti360.png" width="90%"/>        
-      </div>
-
-        <div style="display: flex; justify-content: center; margin-top: 0px;">
-        <img src="./static/images/semantickitti_lidar.png" width="90%"/>        
-      </div>
-      
-    </div>
-    </div>
-  </div>
-</section>
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="text-align: center;">
-      <h2 class="title is-3">Model Efficiency & Monocular Adaptation</h2>
-      <div class="hero-body" style="text-align: left;">
-        <p style="font-size: 18px;">
-  <strong>VoxDet</strong> is highly effcienct (<strong>Left</strong>) regarding model parameters and inference speed. Besides, <strong>VoxDet</strong> achieves the best results using monocular depth (<strong>Right</strong>).
-          <br>
-        </p>
-      </div>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <img src="./static/images/eff_mono.png" style="width:90%; height: auto; margin-top: -40px;" /> 
-        
-      </div>
-
-      
-    </div>
-    </div>
-  </div>
-</section>
-
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-
-          <p>
-            3D Semantic Scene Completion (SSC) aims to reconstruct the 3D geometry and semantics of the surrounding environment. With dense voxel labels, prior works typically formulate SSC as a <em>dense segmentation task</em>, independently classifying each voxel. However, this paradigm neglects critical instance-centric discriminability, leading to instance-level incompleteness and adjacent ambiguities. To address this, we highlight a free lunch of SSC labels: the voxel-level class label has implicitly told the instance-level insight, which is ever-overlooked by the community. Motivated by this observation, we first introduce a training-free <strong>Voxel-to-Instance (VoxNT) trick</strong>: a simple yet effective method that freely converts voxel-level class labels into instance-level offset labels. Building on this, we further propose <strong>VoxDet</strong>, an instance-centric framework that reformulates the voxel-level SSC as <em>dense object detection</em> by decoupling it into two sub-tasks: offset regression and semantic prediction. Specifically, based on the lifted 3D volume, VoxDet first uses (a) Spatially-decoupled Voxel Encoder to generate disentangled feature volumes for the two sub-tasks, which learn task-specific spatial deformation in the densely projected tri-perceptive space. Then, we deploy (b) Task-decoupled Dense Predictor to address SSC via dense detection. Here, we first regress a 4D offset field to estimate distances (6 directions) between voxels and the corresponding object boundaries in the voxel space. The regressed offsets are then used to guide the instance-level aggregation in the classification branch, achieving instance-aware scene completion. VoxDet jointly achieves state-of-the-art on both LiDAR-based and camera-based benchmarks, which is also highly efficient by reducing 57.9% model parameters with around 1.3&times; speed-up. VoxDet also gives 63.0 IoU on the SemanticKITTI test set, ranking 1st on the online leaderboard. 
-          </p>
+          <div style="display: flex; justify-content: center; margin-top: 0px;">
+            <img src="./static/images/semantickitti_lidar.png" width="90%" />
+          </div>
 
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="text-align: center;">
-      <h2 class="title is-3">Acknowledgement</h2>
-      <div class="hero-body" style="text-align: left;">
-        <p style="font-size: 18px;">
-          Thanks so much for the following fantastic projects that inspired us:
-      <ul style="text-align: left; margin: 0 auto; display: inline-block;font-size: 18px; "> 
-
-        <li><strong>[FCOS]</strong> <a href="https://arxiv.org/abs/1904.01355">FCOS: Fully Convolutional One-Stage Object Detection</a></li>
-        <li><strong>[CGFormer]</strong> <a href="https://arxiv.org/abs/2405.13675">Context and Geometry Aware Voxel Transformer for Semantic Scene Completion</a></li>
-        <li><strong>[SIGMA]</strong> <a href="https://arxiv.org/abs/2203.06398">SIGMA: Semantic-complete Graph Matching For Domain Adaptive Object Detection</a></li>
-        <li><strong>[TSD]</strong> <a href="https://arxiv.org/abs/2003.07540">Revisiting the Sibling Head in Object Detector</a></li>
-        <li><strong>[VoxFormer]</strong> <a href="https://arxiv.org/abs/2302.12251">VoxFormer: a Cutting-edge Baseline for 3D Semantic Occupancy Prediction</a></li>
-        
-      </ul>
-        </p>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
+
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body" style="text-align: center;">
+          <h2 class="title is-3">Model Efficiency & Monocular Adaptation</h2>
+          <div class="hero-body" style="text-align: left;">
+            <p style="font-size: 18px;">
+              <strong>VoxDet</strong> is highly effcienct (<strong>Left</strong>) regarding model parameters and
+              inference speed. Besides, <strong>VoxDet</strong> achieves the best results using monocular depth
+              (<strong>Right</strong>).
+              <br>
+            </p>
+          </div>
+          <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <img src="./static/images/eff_mono.png" style="width:90%; height: auto; margin-top: -40px;" />
+
+          </div>
+
+
+        </div>
+      </div>
+      </div>
+    </section>
 
 
 
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Abstract</h2>
+            <div class="content has-text-justified">
+
+              <p>
+                3D Semantic Scene Completion (SSC) aims to reconstruct the 3D geometry and semantics of the surrounding
+                environment. With dense voxel labels, prior works typically formulate SSC as a <em>dense segmentation
+                  task</em>, independently classifying each voxel. However, this paradigm neglects critical
+                instance-centric discriminability, leading to instance-level incompleteness and adjacent ambiguities. To
+                address this, we highlight a free lunch of SSC labels: the voxel-level class label has implicitly told
+                the instance-level insight, which is ever-overlooked by the community. Motivated by this observation, we
+                first introduce a training-free <strong>Voxel-to-Instance (VoxNT) trick</strong>: a simple yet effective
+                method that freely converts voxel-level class labels into instance-level offset labels. Building on
+                this, we further propose <strong>VoxDet</strong>, an instance-centric framework that reformulates the
+                voxel-level SSC as <em>dense object detection</em> by decoupling it into two sub-tasks: offset
+                regression and semantic prediction. Specifically, based on the lifted 3D volume, VoxDet first uses (a)
+                Spatially-decoupled Voxel Encoder to generate disentangled feature volumes for the two sub-tasks, which
+                learn task-specific spatial deformation in the densely projected tri-perceptive space. Then, we deploy
+                (b) Task-decoupled Dense Predictor to address SSC via dense detection. Here, we first regress a 4D
+                offset field to estimate distances (6 directions) between voxels and the corresponding object boundaries
+                in the voxel space. The regressed offsets are then used to guide the instance-level aggregation in the
+                classification branch, achieving instance-aware scene completion. VoxDet jointly achieves
+                state-of-the-art on both LiDAR-based and camera-based benchmarks, which is also highly efficient by
+                reducing 57.9% model parameters with around 1.3&times; speed-up. VoxDet also gives 63.0 IoU on the
+                SemanticKITTI test set, ranking 1st on the online leaderboard.
+              </p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
 
 
-<section class="section" id="BibTeX" style="background-color: #f9f9f9; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-  <div class="container is-max-desktop content" style="max-width: 800px; margin: 0 auto; position: relative;">
-    <h2 class="title" style="font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; text-align: center;">BibTeX</h2>
-    <p style="font-size: 0.9rem; color: #555; text-align: center; margin-bottom: 0.8rem;">
-      If you find our work helpful, please consider citing:
-    </p>
-    <div style="position: relative;">
-      <pre style="background-color: #f5f5f5; color: #2d2d2d; padding: 1rem; border-radius: 6px; font-size: 0.9rem; line-height: 1.4; overflow-x: auto; border: 1px solid #ddd; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); margin: 0;">
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body" style="text-align: center;">
+          <h2 class="title is-3">Acknowledgement</h2>
+          <div class="hero-body" style="text-align: left;">
+            <p style="font-size: 18px;">
+              Thanks so much for the following fantastic projects that inspired us:
+            <ul style="text-align: left; margin: 0 auto; display: inline-block;font-size: 18px; ">
+
+              <li><strong>[FCOS]</strong> <a href="https://arxiv.org/abs/1904.01355">FCOS: Fully Convolutional One-Stage
+                  Object Detection</a></li>
+              <li><strong>[CGFormer]</strong> <a href="https://arxiv.org/abs/2405.13675">Context and Geometry Aware
+                  Voxel Transformer for Semantic Scene Completion</a></li>
+              <li><strong>[SIGMA]</strong> <a href="https://arxiv.org/abs/2203.06398">SIGMA: Semantic-complete Graph
+                  Matching For Domain Adaptive Object Detection</a></li>
+              <li><strong>[TSD]</strong> <a href="https://arxiv.org/abs/2003.07540">Revisiting the Sibling Head in
+                  Object Detector</a></li>
+              <li><strong>[VoxFormer]</strong> <a href="https://arxiv.org/abs/2302.12251">VoxFormer: a Cutting-edge
+                  Baseline for 3D Semantic Occupancy Prediction</a></li>
+
+            </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section class="section" id="BibTeX"
+      style="background-color: #f9f9f9; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+      <div class="container is-max-desktop content" style="max-width: 800px; margin: 0 auto; position: relative;">
+        <h2 class="title" style="font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; text-align: center;">BibTeX</h2>
+        <p style="font-size: 0.9rem; color: #555; text-align: center; margin-bottom: 0.8rem;">
+          If you find our work helpful, please consider citing:
+        </p>
+        <div style="position: relative;">
+          <pre
+            style="background-color: #f5f5f5; color: #2d2d2d; padding: 1rem; border-radius: 6px; font-size: 0.9rem; line-height: 1.4; overflow-x: auto; border: 1px solid #ddd; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); margin: 0;">
 <code id="bibtex-code">
 @article{li2025voxdet,
-  title={VoxDet: Rethinking 3D Semantic Scene Completion as Dense Object Detection},
+  title={VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection},
   author={Li, Wuyang and Yu, Zhu and Alahi, Alexandre},
   journal={arXiv preprint},
   year={2025}
 }
 </code>
       </pre>
-      <button id="copy-button" style="position: absolute; top: 10px; right: 10px; background-color: #007BFF; color: #fff; border: none; border-radius: 5px; padding: 0.4rem 1rem; cursor: pointer; font-size: 0.8rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
-        Copy
-      </button>
-    </div>
-  </div>
-</section>
+          <button id="copy-button"
+            style="position: absolute; top: 10px; right: 10px; background-color: #007BFF; color: #fff; border: none; border-radius: 5px; padding: 0.4rem 1rem; cursor: pointer; font-size: 0.8rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+            Copy
+          </button>
+        </div>
+      </div>
+    </section>
 
-  
-  <!-- Three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script>
-    
-    // 容器与场景、相机、渲染器
-    const container = document.getElementById('voxel-container');
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      45,
-      container.clientWidth / container.clientHeight,
-      0.1,
-      1000
-    );
-    camera.position.set(100, 100, 140);
-    camera.lookAt(0, 0, 0);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(renderer.domElement);
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
 
-    // 灯光
-    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    dirLight.position.set(1, 1, 0.5);
-    scene.add(dirLight);
+      // 容器与场景、相机、渲染器
+      const container = document.getElementById('voxel-container');
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        45,
+        container.clientWidth / container.clientHeight,
+        0.1,
+        1000
+      );
+      camera.position.set(100, 100, 140);
+      camera.lookAt(0, 0, 0);
 
-    // 父级组：体素 + 箭头 + 外框
-    const rotateGroup = new THREE.Group();
-    scene.add(rotateGroup);
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
 
-    // 1. 体素群：蓝到粉渐变 & 半透明
-    const voxelGroup = new THREE.Group();
-    const size = 5;
-    const cubeSize = 14;
-    const spacing = 18;
-    const blueColor = new THREE.Color(0x036bfc);
-    const pinkColor = new THREE.Color(0xe250ff);
-    const baseMat = new THREE.MeshStandardMaterial({
-      transparent: true,
-      opacity: 0.3
-    });
-    const maxSum = (size - 1) * 3;
+      // 灯光
+      scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      dirLight.position.set(1, 1, 0.5);
+      scene.add(dirLight);
 
-    for (let x = 0; x < size; x++) {
-      for (let y = 0; y < size; y++) {
-        for (let z = 0; z < size; z++) {
-          const t = (x + y + z) / maxSum;
-          const mat = baseMat.clone();
-          mat.color.copy(blueColor).lerp(pinkColor, t);
+      // 父级组：体素 + 箭头 + 外框
+      const rotateGroup = new THREE.Group();
+      scene.add(rotateGroup);
 
-          const geo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-          const mesh = new THREE.Mesh(geo, mat);
-          mesh.position.set(
-            (x - (size - 1) / 2) * spacing,
-            (y - (size - 1) / 2) * spacing,
-            (z - (size - 1) / 2) * spacing
-          );
-          voxelGroup.add(mesh);
+      // 1. 体素群：蓝到粉渐变 & 半透明
+      const voxelGroup = new THREE.Group();
+      const size = 5;
+      const cubeSize = 14;
+      const spacing = 18;
+      const blueColor = new THREE.Color(0x036bfc);
+      const pinkColor = new THREE.Color(0xe250ff);
+      const baseMat = new THREE.MeshStandardMaterial({
+        transparent: true,
+        opacity: 0.3
+      });
+      const maxSum = (size - 1) * 3;
+
+      for (let x = 0; x < size; x++) {
+        for (let y = 0; y < size; y++) {
+          for (let z = 0; z < size; z++) {
+            const t = (x + y + z) / maxSum;
+            const mat = baseMat.clone();
+            mat.color.copy(blueColor).lerp(pinkColor, t);
+
+            const geo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(
+              (x - (size - 1) / 2) * spacing,
+              (y - (size - 1) / 2) * spacing,
+              (z - (size - 1) / 2) * spacing
+            );
+            voxelGroup.add(mesh);
+          }
         }
       }
-    }
-    rotateGroup.add(voxelGroup);
+      rotateGroup.add(voxelGroup);
 
-    // 2. 外部黑色细边框（包围整个体素群）
-    {
-      // 计算边框尺寸：spacing*(size-1) + cubeSize
-      const boundSize = (size - 1) * spacing + cubeSize;
-      const boxGeo = new THREE.BoxGeometry(boundSize, boundSize, boundSize);
-      const edgesGeo = new THREE.EdgesGeometry(boxGeo);
-      const lineMat = new THREE.LineBasicMaterial({ color: 0x4B0082, linewidth: 1 });
-      const border = new THREE.LineSegments(edgesGeo, lineMat);
-      rotateGroup.add(border);
-    }
+      // 2. 外部黑色细边框（包围整个体素群）
+      {
+        // 计算边框尺寸：spacing*(size-1) + cubeSize
+        const boundSize = (size - 1) * spacing + cubeSize;
+        const boxGeo = new THREE.BoxGeometry(boundSize, boundSize, boundSize);
+        const edgesGeo = new THREE.EdgesGeometry(boxGeo);
+        const lineMat = new THREE.LineBasicMaterial({ color: 0x4B0082, linewidth: 1 });
+        const border = new THREE.LineSegments(edgesGeo, lineMat);
+        rotateGroup.add(border);
+      }
 
-    // 3. 六方向加粗箭头
-    const halfExt = (size - 1) / 2 * spacing + cubeSize / 2;
-    const arrowLen = halfExt + 20;
-    const headLength = 12, headWidth = 12;
-    function addArrow(dir, color) {
-      const arrow = new THREE.ArrowHelper(
-        dir.clone().normalize(),
-        new THREE.Vector3(),
-        arrowLen,
-        color,
-        headLength,
-        headWidth
-      );
-      // 尝试加宽箭身（部分平台对 linewidth 支持有限）
-      arrow.line.material.linewidth = 3;
-      rotateGroup.add(arrow);
-    }
+      // 3. 六方向加粗箭头
+      const halfExt = (size - 1) / 2 * spacing + cubeSize / 2;
+      const arrowLen = halfExt + 20;
+      const headLength = 12, headWidth = 12;
+      function addArrow(dir, color) {
+        const arrow = new THREE.ArrowHelper(
+          dir.clone().normalize(),
+          new THREE.Vector3(),
+          arrowLen,
+          color,
+          headLength,
+          headWidth
+        );
+        // 尝试加宽箭身（部分平台对 linewidth 支持有限）
+        arrow.line.material.linewidth = 3;
+        rotateGroup.add(arrow);
+      }
 
-    addArrow(new THREE.Vector3( 1,  0,  0), 0xff0000);
-    addArrow(new THREE.Vector3(-1,  0,  0), 0xaa0000);
-    addArrow(new THREE.Vector3( 0,  1,  0), 0x00ff00);
-    addArrow(new THREE.Vector3( 0, -1,  0), 0x00aa00);
-    addArrow(new THREE.Vector3( 0,  0,  1), 0x0000ff);
-    addArrow(new THREE.Vector3( 0,  0, -1), 0x0000aa);
+      addArrow(new THREE.Vector3(1, 0, 0), 0xff0000);
+      addArrow(new THREE.Vector3(-1, 0, 0), 0xaa0000);
+      addArrow(new THREE.Vector3(0, 1, 0), 0x00ff00);
+      addArrow(new THREE.Vector3(0, -1, 0), 0x00aa00);
+      addArrow(new THREE.Vector3(0, 0, 1), 0x0000ff);
+      addArrow(new THREE.Vector3(0, 0, -1), 0x0000aa);
 
-    // 动画：旋转整个组
-    function animate() {
-      requestAnimationFrame(animate);
-      rotateGroup.rotation.x += 0.005;
-      rotateGroup.rotation.y += 0.01;
-      renderer.render(scene, camera);
-    }
-    animate();
+      // 动画：旋转整个组
+      function animate() {
+        requestAnimationFrame(animate);
+        rotateGroup.rotation.x += 0.005;
+        rotateGroup.rotation.y += 0.01;
+        renderer.render(scene, camera);
+      }
+      animate();
 
-    // 自适应容器尺寸变化
-    window.addEventListener('resize', () => {
-      const w = container.clientWidth, h = container.clientHeight;
-      renderer.setSize(w, h);
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-    });
+      // 自适应容器尺寸变化
+      window.addEventListener('resize', () => {
+        const w = container.clientWidth, h = container.clientHeight;
+        renderer.setSize(w, h);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      });
 
 
-  // 获取代码块和按钮
-  const copyButton = document.getElementById("copy-button");
-  const bibtexCode = document.getElementById("bibtex-code").innerText;
+      // 获取代码块和按钮
+      const copyButton = document.getElementById("copy-button");
+      const bibtexCode = document.getElementById("bibtex-code").innerText;
 
-  // 添加点击事件
-  copyButton.addEventListener("click", () => {
-    // 将代码复制到剪贴板
-    navigator.clipboard.writeText(bibtexCode).then(() => {
-      // 显示反馈文本
-      copyButton.textContent = "Copied!";
-      // 2秒后恢复为 "Copy"
-      setTimeout(() => {
-        copyButton.textContent = "Copy";
-      }, 2000);
-    }).catch((err) => {
-      console.error("Failed to copy text: ", err);
-    });
-  });
-  </script>
-</body>
+      // 添加点击事件
+      copyButton.addEventListener("click", () => {
+        // 将代码复制到剪贴板
+        navigator.clipboard.writeText(bibtexCode).then(() => {
+          // 显示反馈文本
+          copyButton.textContent = "Copied!";
+          // 2秒后恢复为 "Copy"
+          setTimeout(() => {
+            copyButton.textContent = "Copy";
+          }, 2000);
+        }).catch((err) => {
+          console.error("Failed to copy text: ", err);
+        });
+      });
+    </script>
+  </body>
+
 </html>
 </body>
+
 </html>
