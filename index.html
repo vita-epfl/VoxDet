@@ -136,7 +136,7 @@
   <body>
     <section class="hero">
       <div class="hero-body">
-        <div class="container">
+        <div class="container is-max-desktop">
           <div class="columns is-centered">
             <div class="column has-text-centered">
 
@@ -220,7 +220,7 @@
               <li><strong>Versatile:</strong> Adaptable to various voxel-based scenarios, such as <a class="red-text">
                   camera and LiDAR</a> settings.</li>
               <li><strong>Powerful:</strong> Achieve <a class="red-text">joint state-of-the-art</a> on camera-based and
-                LiDAR-based SSC benchmarks.</li>
+                LiDAR-based benchmarks.</li>
               <li><strong>Efficient:</strong> <a class="red-text">Fast</a> (~1.3× speed-up) and <a
                   class="red-text">lightweight</a> (reducing ~57.9% parameters).</li>
               <li><strong>Leaderboard Topper:</strong> Achieve <a class="red-text">63.0 IoU</a> (single-frame &
@@ -289,7 +289,8 @@
           <h2 class="title is-3">VoxDet: Fully Using the Generated Free Offset Labels</h2>
           <div class="hero-body" style="text-align: left;">
             <p style="font-size: 18px;">
-              <strong>VoxDet</strong> reformulates the voxel-level SSC as dense object detection to achieve
+              <strong>VoxDet</strong> reformulates the voxel-level occupancy prediction as instance-level dense object
+              detection to achieve
               instance-centric learning, which decouples it into two sub-tasks: offset regression and semantic
               prediction. This is based on the generated offset labels from the <strong>VoxNT</strong> trick.
               <br>
@@ -329,12 +330,13 @@
     <section class="hero teaser">
       <div class="container is-max-desktop">
         <div class="hero-body" style="text-align: center;">
-          <h2 class="title is-3">Camera/LiDAR-based SSC Benchmarks</h2>
+          <h2 class="title is-3">Camera/LiDAR-based Benchmarks</h2>
           <div class="hero-body" style="text-align: left;">
             <p style="font-size: 18px;">
-              <strong>VoxDet</strong> achieves state-of-the-art performance on the camera-based SSC benchmarks,
-              including SemanticKITTI and KITTI360 (the first and second tables), and LiDAR-based SSC benchmarks (the
-              third table).
+              <strong>VoxDet</strong> achieves state-of-the-art performance on the camera-based benchmarks,
+              including SemanticKITTI and SSCBench-KITTI-360 (the 1st and 2nd tables), and LiDAR-based
+              SemanticKITTI benchmark (the
+              3rd table).
               <br>
             </p>
           </div>
@@ -388,26 +390,28 @@
             <div class="content has-text-justified">
 
               <p>
-                3D Semantic Scene Completion (SSC) aims to reconstruct the 3D geometry and semantics of the surrounding
-                environment. With dense voxel labels, prior works typically formulate SSC as a <em>dense segmentation
-                  task</em>, independently classifying each voxel. However, this paradigm neglects critical
-                instance-centric discriminability, leading to instance-level incompleteness and adjacent ambiguities. To
-                address this, we highlight a free lunch of SSC labels: the voxel-level class label has implicitly told
-                the instance-level insight, which is ever-overlooked by the community. Motivated by this observation, we
-                first introduce a training-free <strong>Voxel-to-Instance (VoxNT) trick</strong>: a simple yet effective
-                method that freely converts voxel-level class labels into instance-level offset labels. Building on
-                this, we further propose <strong>VoxDet</strong>, an instance-centric framework that reformulates the
-                voxel-level SSC as <em>dense object detection</em> by decoupling it into two sub-tasks: offset
-                regression and semantic prediction. Specifically, based on the lifted 3D volume, VoxDet first uses (a)
-                Spatially-decoupled Voxel Encoder to generate disentangled feature volumes for the two sub-tasks, which
-                learn task-specific spatial deformation in the densely projected tri-perceptive space. Then, we deploy
-                (b) Task-decoupled Dense Predictor to address SSC via dense detection. Here, we first regress a 4D
-                offset field to estimate distances (6 directions) between voxels and the corresponding object boundaries
-                in the voxel space. The regressed offsets are then used to guide the instance-level aggregation in the
-                classification branch, achieving instance-aware scene completion. VoxDet jointly achieves
-                state-of-the-art on both LiDAR-based and camera-based benchmarks, which is also highly efficient by
-                reducing 57.9% model parameters with around 1.3&times; speed-up. VoxDet also gives 63.0 IoU on the
-                SemanticKITTI test set, ranking 1st on the online leaderboard.
+                3D semantic occupancy prediction aims to reconstruct the 3D geometry and semantics of the surrounding
+                environment. With dense voxel labels, prior works typically formulate it as a dense segmentation task,
+                independently classifying each voxel. However, this paradigm neglects critical instance-centric
+                discriminability, leading to instance-level incompleteness and adjacent ambiguities. To address this, we
+                highlight a free lunch of occupancy labels: the voxel-level class label implicitly provides insight at
+                the instance level, which is overlooked by
+                the community. Motivated by this observation, we first introduce a training-free Voxel-to-Instance
+                (VoxNT) trick: a simple yet effective method that freely converts voxel-level class labels into
+                instance-level offset labels. Building on this, we further propose VoxDet, an instance-centric framework
+                that reformulates the voxel-level occupancy prediction as dense object detection by decoupling it into
+                two sub-tasks: offset regression and semantic prediction. Specifically, based on the lifted 3D volume,
+                VoxDet first
+                uses (a) Spatially-decoupled Voxel Encoder to generate disentangled feature volumes for the two
+                sub-tasks, which learn task-specific spatial deformation in the densely projected tri-perceptive space.
+                Then, we deploy (b) Task-decoupled Dense Predictor to address this task via dense detection. Here, we
+                first regress a 4D offset field to estimate distances (6 directions) between voxels and object borders
+                in the voxel space. The regressed offsets are then used to
+                guide the instance-level aggregation in the classification branch, achieving instance-aware prediction.
+                Experiments show that VoxDet can be deployed on both camera and LiDAR input, jointly achieving
+                state-of-the-art results on both benchmarks. VoxDet is not only highly efficient, but also gives 63.0
+                IoU on the SemanticKITTI test set, ranking 1st on the online leaderboard.
+
               </p>
 
             </div>
