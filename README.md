@@ -1,15 +1,18 @@
 # [ArXiv 25] VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection
 
-### [[Project Page]](https://vita-epfl.github.io/VoxDet/)  [[Paper (Comming)]]()
+### [[Project Page]](https://vita-epfl.github.io/VoxDet/)  [[ArXiv (Comming)]]() [[Temporal Paper Link]](./assets/VoxDet_ArXiv.pdf)
 
 📌 This is the official PyTorch implementation of the work:
 
 > [**VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection**]() <br>
 > [Wuyang Li <sup>1 </sup>](https://wymancv.github.io/wuyang.github.io/), [Zhu Yu <sup>2 </sup>](), [Alexandre Alahi <sup>1 </sup>](https://scholar.google.com/citations?user=UIhXQ64AAAAJ&hl=en) <br><sup>1 </sup> École Polytechnique Fédérale de Lausanne (EPFL); <sup>2 </sup> Zhejiang University
 
+I noticed that some cool researchers have already discovered this repository, although our paper isn’t yet online. Our arXiv preprint is marked as "on hold" and may take some time to appear—sorry for the delay. In the meantime, here’s a temporary link to our paper: [Paper Link](./assets/VoxDet_ArXiv.pdf).
+
 <div align="center">
     <img width="100%" alt="VoxDet overview" src="assets/introduction.png"/>
 </div>
+
 
 
 ***Code is coming soon! We’re currently cleaning up the code and unifying the camera- and LiDAR-based implementations into a single project, which serves as a powerful, clean, and extensible baseline model for the community. If you can’t wait for the official release, feel free to contact me for the individual implementations.***
