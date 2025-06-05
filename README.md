@@ -34,6 +34,19 @@ Note that VoxDet is single-frame single-model method without extra data and labe
     <img width="100%" alt="VoxDet overview" src="assets/leaderboard.png"/>
 </div>
 
+
+## 📈 Training logs
+
+VoxDet (blue curve) is significantly more efficient and effective than the previous state-of-the-art method, CGFormer (gray color).
+
+
+
+<div align="center">
+    <img width="80%" alt="VoxDet logs" src="assets/log.png"/>
+</div>
+
+
+
 ## 🙏 Acknowledgement
 
 Greatly appreciate the tremendous effort for the following projects!
@@ -46,8 +59,8 @@ Greatly appreciate the tremendous effort for the following projects!
 
 ## 📋 TODO List
 
-- [ ] Release the paper
-- [ ] Release all unified codebase, including both camera-based and LiDAR-based implementation
+- [ ] Release the arXiv paper
+- [ ] Release the unified codebase, including both camera-based and LiDAR-based implementation
 - [ ] Release all models
 
 ## 📚Citeation
