@@ -1,6 +1,6 @@
 # [ArXiv 25] VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection
 
-### [[Project Page]](https://vita-epfl.github.io/VoxDet/)  [[ArXiv]](https://arxiv.org/abs/2506.04623) 
+### [[Project Page]](https://vita-epfl.github.io/VoxDet/)  [[ArXiv]](https://arxiv.org/abs/2506.04623) [[PPT]](./assets/Pre.pdf) 
 
 📌 This is the official PyTorch implementation of the work:
 
@@ -75,7 +75,7 @@ If you think our work is helpful for your project, I would greatly appreciate it
 @article{li2025voxdet,
   title={VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection},
   author={Li, Wuyang and Yu, Zhu and Alahi, Alexandre},
-  journal={arXiv preprint},
+  journal={arXiv preprint arXiv:2506.04623},
   year={2025}
 }
 ```
