@@ -100,6 +100,14 @@
     .publication-title {
       line-height: 1.2;
     }
+.publication-title,
+.content p {
+  /* 推荐两者都加，防止任何长字符串溢出 */
+  word-wrap: break-word;      /* 旧写法，兼容性好 */
+  overflow-wrap: break-word;  /* 新写法 */
+  /* 也可以用： word-break: break-all; 
+     但是可能会把英文单词随意断开，通常不推荐 */
+}
 
     .is-size-4 {
       font-size: 1.25rem;
@@ -134,23 +142,23 @@
   </head>
 
   <body>
-    <section class="hero">
-      <div class="hero-body">
+    <!-- <section class="hero teaser">
+      <div class="hero-body" >
         <div class="container is-max-desktop">
           <div class="columns is-centered">
             <div class="column has-text-centered">
 
-              <!-- 3D 体素容器（替换原 rotating-cube） -->
+
               <div id="voxel-container"></div>
 
-              <!-- 标题 -->
-              <h1 class="title is-1 publication-title">
+
+              <h1 class="title is-1 publication-title" style="">
                 <span style="color:#036bfc">V</span><span style="color:#3503fc">o</span><span
                   style="color:#a200ff">x</span><span style="color:#e250ff">Det</span>: Rethinking 3D Semantic Scene
                 Completion as<br>Dense Object Detection
               </h1>
 
-              <!-- 作者 -->
+  
               <div class="is-size-4 publication-authors">
                 <span class="author-block"><a href="https://wymancv.github.io/wuyang.github.io/">Wuyang
                     Li</a><sup>1</sup>,</span>
@@ -160,16 +168,14 @@
                     Alahi</a><sup>1</sup>,</span>
               </div>
 
-              <!-- 单位 -->
               <div class="is-size-5 publication-authors">
                 <span class="author-block"><sup>1</sup><a href="https://www.epfl.ch/labs/vita/">VITA@EPFL</a>,</span>
                 <span class="author-block"><sup>2</sup>Zhejiang University</span>
               </div>
 
-              <!-- 链接 -->
               <div class="publication-links">
                 <span class="link-block">
-                  <a href="" class="button">
+                  <a href="https://arxiv.org/abs/2506.04623" class="button">
                     <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
                   </a>
                 </span>
@@ -184,7 +190,49 @@
           </div>
         </div>
       </div>
+    </section> -->
+
+
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body" style="text-align: center;">
+          <div id="voxel-container"></div>
+              <h1 class="title is-1 publication-title">
+                <span style="color:#036bfc">V</span><span style="color:#3503fc">o</span><span
+                  style="color:#a200ff">x</span><span style="color:#e250ff">Det</span>: Rethinking 3D Semantic Scene
+                Completion as Dense Object Detection
+              </h1>
+                        <div class="is-size-4 publication-authors">
+                <span class="author-block"><a href="https://wymancv.github.io/wuyang.github.io/">Wuyang
+                    Li</a><sup>1</sup>,</span>
+                <span class="author-block"><a href="#">Zhu Yu</a><sup>2</sup>,</span>
+                <span class="author-block"><a
+                    href="https://scholar.google.com/citations?user=UIhXQ64AAAAJ&hl=en">Alexandre
+                    Alahi</a><sup>1</sup>,</span>
+              </div>
+                  <div class="is-size-5 publication-authors">
+                <span class="author-block"><sup>1</sup><a href="https://www.epfl.ch/labs/vita/">VITA@EPFL</a>,</span>
+                <span class="author-block"><sup>2</sup>Zhejiang University</span>
+              </div>
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2506.04623" class="button">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://github.com/vita-epfl/VoxDet" class="button">
+                    <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
+                  </a>
+                </span>
+              </div>
+
+        </div>
+      </div>
     </section>
+
+
+
 
     <!-- https://github.com/vita-epfl/VoxDet -->
 
@@ -382,7 +430,7 @@
 
 
 
-    <section class="section">
+    <!-- <section class="section">
       <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
@@ -418,9 +466,41 @@
           </div>
         </div>
       </div>
+    </section> -->
+
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body" style="text-align: center;">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="hero-body" style="text-align: left;">
+              <p>
+                3D semantic occupancy prediction aims to reconstruct the 3D geometry and semantics of the surrounding
+                environment. With dense voxel labels, prior works typically formulate it as a dense segmentation task,
+                independently classifying each voxel. However, this paradigm neglects critical instance-centric
+                discriminability, leading to instance-level incompleteness and adjacent ambiguities. To address this, we
+                highlight a free lunch of occupancy labels: the voxel-level class label implicitly provides insight at
+                the instance level, which is overlooked by
+                the community. Motivated by this observation, we first introduce a training-free Voxel-to-Instance
+                (VoxNT) trick: a simple yet effective method that freely converts voxel-level class labels into
+                instance-level offset labels. Building on this, we further propose VoxDet, an instance-centric framework
+                that reformulates the voxel-level occupancy prediction as dense object detection by decoupling it into
+                two sub-tasks: offset regression and semantic prediction. Specifically, based on the lifted 3D volume,
+                VoxDet first
+                uses (a) Spatially-decoupled Voxel Encoder to generate disentangled feature volumes for the two
+                sub-tasks, which learn task-specific spatial deformation in the densely projected tri-perceptive space.
+                Then, we deploy (b) Task-decoupled Dense Predictor to address this task via dense detection. Here, we
+                first regress a 4D offset field to estimate distances (6 directions) between voxels and object borders
+                in the voxel space. The regressed offsets are then used to
+                guide the instance-level aggregation in the classification branch, achieving instance-aware prediction.
+                Experiments show that VoxDet can be deployed on both camera and LiDAR input, jointly achieving
+                state-of-the-art results on both benchmarks. VoxDet is not only highly efficient, but also gives 63.0
+                IoU on the SemanticKITTI test set, ranking 1st on the online leaderboard.
+
+              </p>
+          </div>
+        </div>
+      </div>
     </section>
-
-
 
     <section class="hero teaser">
       <div class="container is-max-desktop">
