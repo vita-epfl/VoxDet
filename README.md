@@ -7,28 +7,25 @@
 > [**VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection**](https://arxiv.org/abs/2506.04623) <br>
 > [Wuyang Li <sup>1 </sup>](https://wymancv.github.io/wuyang.github.io/), [Zhu Yu <sup>2 </sup>](), [Alexandre Alahi <sup>1 </sup>](https://scholar.google.com/citations?user=UIhXQ64AAAAJ&hl=en) <br><sup>1 </sup> École Polytechnique Fédérale de Lausanne (EPFL); <sup>2 </sup> Zhejiang University
 
-<!-- I noticed that some cool researchers have already discovered this repository, although our paper isn’t yet online. Our arXiv preprint is marked as "on hold" and may take some time to appear—sorry for the delay. In the meantime, here’s a temporary link to our paper: [Paper Link](./assets/VoxDet_ArXiv.pdf). -->
-
 <div align="center">
     <img width="100%" alt="VoxDet overview" src="assets/introduction.png"/>
 </div>
 
 
-
-***Code is coming soon! We’re currently cleaning up the code and unifying the camera- and LiDAR-based implementations into a single project, which serves as a powerful, clean, and extensible baseline model for the community. If you can’t wait for the official release, feel free to contact me for the individual implementations.***
+**We will officially open-source our code after the paper review. But considering the approaching CVPR/ICLR deadlines (and I am also a kind person), anyone who really likes our work and hopes to follow our work can email me to get the developing version (has not been fully code-cleaned), which is also used for our developing VoxDet++. It was ready last month and has been sent to some followers. Thank you for being so understanding!**
 
 Contact: [wuyang.li@epfl.ch](mailto:wuyang.li@epfl.ch)
 
 ## ✨ Highlight
 
-*VoxDet* address semantic occupancy prediction with an instance-centric formulation inspried by dense object detection, which uses a *Voxel-to-Instance (VoxNT)* trick freely transferring voxel-level class labels to instance-level offset labels.
+*VoxDet* addresses semantic occupancy prediction with an instance-centric formulation inspried by dense object detection, which uses a *Voxel-to-Instance (VoxNT)* trick freely transferring voxel-level class labels to instance-level offset labels.
 
 - **Versatile**: Adaptable to various voxel-based scenarios, such as camera and LiDAR settings.
 - **Powerful**: Achieve joint state-of-the-art on both camera-based and LiDAR-based SSC benchmarks.
 - **Efficient**: Fast (~1.3× speed-up) and lightweight (reducing ~57.9% parameters).
 - **Leaderboard Topper**: Achieve 63.0 IoU (single-frame model), securing 1st place on the SemanticKITTI leaderboard.
 
-Note that VoxDet is single-frame single-model method without extra data and labels.
+Note that VoxDet is a single-frame single-model method without extra data and labels.
 
 <div align="center">
     <img width="100%" alt="VoxDet overview" src="assets/leaderboard.png"/>
@@ -59,8 +56,8 @@ Greatly appreciate the tremendous effort for the following projects!
 
 ## 📋 TODO List
 
-- [ ] Release the arXiv paper
-- [ ] Release the unified codebase, including both camera-based and LiDAR-based implementation
+- [x] Release the arXiv paper
+- [ ] Release the unified codebase, including both camera-based and LiDAR-based implementations
 - [ ] Release all models
 
 ## 📚Citeation
@@ -69,7 +66,7 @@ Greatly appreciate the tremendous effort for the following projects!
     <img width="100%" alt="VoxDet overview" src="assets/overall.png"/>
 </div>
 
-If you think our work is helpful for your project, I would greatly appreciate it if you could consdier citing our work
+If you think our work is helpful for your project, I would greatly appreciate it if you could consider citing our work.
 
 ```bibtex
 @article{li2025voxdet,
