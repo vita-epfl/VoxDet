@@ -77,12 +77,12 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python main.py \
 --log_every_n_steps 100
 ```
 
-### KITTI-360 Camera-based
+### Camera-based KITTI-360
 
 2× A100 80G
 
 ```bash
-CUDA_VISIBLE_DEVICES=0,1,2,3 python main.py \
+CUDA_VISIBLE_DEVICES=0,1 python main.py \
 --config_path configs/voxdet-kitt360-cam.py \
 --log_folder voxdet-kitt360-cam \
 --seed 42 \
@@ -130,7 +130,7 @@ python main.py \
 For official SemanticKITTI leaderboard submission:
 
 ```bash
-CUDA_VISIBLE_DEVICES=0,1,2,3 python main.py \
+python main.py \
 --eval --ckpt_path ./ckpts/voxdet-semantickitti-cam.ckpt \
 --config_path configs/voxdet-semantickitti-cam-submit.py \
 --log_folder voxdet-semantickitti-cam-submission \
