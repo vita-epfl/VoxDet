@@ -1,0 +1,14 @@
+mmengine==0.10.7
+safetensors==0.4.0
+timm==0.9.12
+open3d-python==0.7.0.0
+easydict
+fvcore
+einops
+torchmetrics
+spconv-cu113==2.3.6
+pytorch-lightning==1.7.0
+setuptools==59.5.0
+natten
+yapf==0.40.0
+torch-scatter==2.0.9

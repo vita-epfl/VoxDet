@@ -1,0 +1,568 @@
+data_root = '/mnt/vita/scratch/datasets/SSCBenchKITTI360'
+ann_file = '/mnt/vita/scratch/datasets/SSCBenchKITTI360/labels'
+stereo_depth_root = '/mnt/vita/scratch/datasets/SSCBenchKITTI360/depth'
+camera_used = ['left']
+dataset_type = 'KITTI360Dataset'
+point_cloud_range = [0, -25.6, -2, 51.2, 25.6, 4.4]
+occ_size = [256, 256, 32]
+kitti360_class_frequencies = [
+    2264087502, 20098728, 104972, 96297, 1149426, 4051087, 125103, 105540713,
+    16292249, 45297267, 14454132, 110397082, 6766219, 295883213, 50037503,
+    1561069, 406330, 30516166, 1950115
+]
+class_names = [
+    'unlabeled', 'car', 'bicycle', 'motorcycle', 'truck', 'other-vehicle',
+    'person', 'road', 'parking', 'sidewalk', 'other-ground', 'building',
+    'fence', 'vegetation', 'terrain', 'pole', 'traffic-sign',
+    'other-structure', 'other-object'
+]
+num_class = 19
+bda_aug_conf = dict(
+    rot_lim=(-22.5, 22.5),
+    scale_lim=(0.95, 1.05),
+    flip_dx_ratio=0.5,
+    flip_dy_ratio=0.5,
+    flip_dz_ratio=0)
+data_config = dict(
+    input_size=(384, 1408),
+    resize=(0.0, 0.0),
+    rot=(0.0, 0.0),
+    flip=False,
+    crop_h=(0.0, 0.0),
+    resize_test=0.0)
+train_pipeline = [
+    dict(
+        type='LoadMultiViewImageFromFiles',
+        data_config=dict(
+            input_size=(384, 1408),
+            resize=(0.0, 0.0),
+            rot=(0.0, 0.0),
+            flip=False,
+            crop_h=(0.0, 0.0),
+            resize_test=0.0),
+        load_stereo_depth=True,
+        is_train=True,
+        color_jitter=(0.4, 0.4, 0.4)),
+    dict(
+        type='CreateDepthFromLiDAR',
+        data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+        dataset='kitti360',
+        load_seg=False),
+    dict(
+        type='LoadAnnotationOcc',
+        bda_aug_conf=dict(
+            rot_lim=(-22.5, 22.5),
+            scale_lim=(0.95, 1.05),
+            flip_dx_ratio=0.5,
+            flip_dy_ratio=0.5,
+            flip_dz_ratio=0),
+        apply_bda=False,
+        is_train=True,
+        point_cloud_range=[0, -25.6, -2, 51.2, 25.6, 4.4]),
+    dict(
+        type='CollectData',
+        keys=['img_inputs', 'gt_occ'],
+        meta_keys=[
+            'pc_range', 'occ_size', 'raw_img', 'stereo_depth', 'focal_length',
+            'baseline', 'img_shape', 'gt_depths'
+        ])
+]
+trainset_config = dict(
+    type='KITTI360Dataset',
+    stereo_depth_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360/depth',
+    data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+    ann_file='/mnt/vita/scratch/datasets/SSCBenchKITTI360/labels',
+    pipeline=[
+        dict(
+            type='LoadMultiViewImageFromFiles',
+            data_config=dict(
+                input_size=(384, 1408),
+                resize=(0.0, 0.0),
+                rot=(0.0, 0.0),
+                flip=False,
+                crop_h=(0.0, 0.0),
+                resize_test=0.0),
+            load_stereo_depth=True,
+            is_train=True,
+            color_jitter=(0.4, 0.4, 0.4)),
+        dict(
+            type='CreateDepthFromLiDAR',
+            data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+            dataset='kitti360',
+            load_seg=False),
+        dict(
+            type='LoadAnnotationOcc',
+            bda_aug_conf=dict(
+                rot_lim=(-22.5, 22.5),
+                scale_lim=(0.95, 1.05),
+                flip_dx_ratio=0.5,
+                flip_dy_ratio=0.5,
+                flip_dz_ratio=0),
+            apply_bda=False,
+            is_train=True,
+            point_cloud_range=[0, -25.6, -2, 51.2, 25.6, 4.4]),
+        dict(
+            type='CollectData',
+            keys=['img_inputs', 'gt_occ'],
+            meta_keys=[
+                'pc_range', 'occ_size', 'raw_img', 'stereo_depth',
+                'focal_length', 'baseline', 'img_shape', 'gt_depths'
+            ])
+    ],
+    split='train',
+    camera_used=['left'],
+    occ_size=[256, 256, 32],
+    pc_range=[0, -25.6, -2, 51.2, 25.6, 4.4],
+    test_mode=False)
+test_pipeline = [
+    dict(
+        type='LoadMultiViewImageFromFiles',
+        data_config=dict(
+            input_size=(384, 1408),
+            resize=(0.0, 0.0),
+            rot=(0.0, 0.0),
+            flip=False,
+            crop_h=(0.0, 0.0),
+            resize_test=0.0),
+        load_stereo_depth=True,
+        is_train=False,
+        color_jitter=None),
+    dict(
+        type='CreateDepthFromLiDAR',
+        data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+        dataset='kitti360'),
+    dict(
+        type='LoadAnnotationOcc',
+        bda_aug_conf=dict(
+            rot_lim=(-22.5, 22.5),
+            scale_lim=(0.95, 1.05),
+            flip_dx_ratio=0.5,
+            flip_dy_ratio=0.5,
+            flip_dz_ratio=0),
+        apply_bda=False,
+        is_train=False,
+        point_cloud_range=[0, -25.6, -2, 51.2, 25.6, 4.4]),
+    dict(
+        type='CollectData',
+        keys=['img_inputs', 'gt_occ'],
+        meta_keys=[
+            'pc_range', 'occ_size', 'sequence', 'frame_id', 'raw_img',
+            'stereo_depth', 'focal_length', 'baseline', 'img_shape',
+            'gt_depths'
+        ])
+]
+testset_config = dict(
+    type='KITTI360Dataset',
+    stereo_depth_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360/depth',
+    data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+    ann_file='/mnt/vita/scratch/datasets/SSCBenchKITTI360/labels',
+    pipeline=[
+        dict(
+            type='LoadMultiViewImageFromFiles',
+            data_config=dict(
+                input_size=(384, 1408),
+                resize=(0.0, 0.0),
+                rot=(0.0, 0.0),
+                flip=False,
+                crop_h=(0.0, 0.0),
+                resize_test=0.0),
+            load_stereo_depth=True,
+            is_train=False,
+            color_jitter=None),
+        dict(
+            type='CreateDepthFromLiDAR',
+            data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+            dataset='kitti360'),
+        dict(
+            type='LoadAnnotationOcc',
+            bda_aug_conf=dict(
+                rot_lim=(-22.5, 22.5),
+                scale_lim=(0.95, 1.05),
+                flip_dx_ratio=0.5,
+                flip_dy_ratio=0.5,
+                flip_dz_ratio=0),
+            apply_bda=False,
+            is_train=False,
+            point_cloud_range=[0, -25.6, -2, 51.2, 25.6, 4.4]),
+        dict(
+            type='CollectData',
+            keys=['img_inputs', 'gt_occ'],
+            meta_keys=[
+                'pc_range', 'occ_size', 'sequence', 'frame_id', 'raw_img',
+                'stereo_depth', 'focal_length', 'baseline', 'img_shape',
+                'gt_depths'
+            ])
+    ],
+    split='test',
+    camera_used=['left'],
+    occ_size=[256, 256, 32],
+    pc_range=[0, -25.6, -2, 51.2, 25.6, 4.4])
+data = dict(
+    train=dict(
+        type='KITTI360Dataset',
+        stereo_depth_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360/depth',
+        data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+        ann_file='/mnt/vita/scratch/datasets/SSCBenchKITTI360/labels',
+        pipeline=[
+            dict(
+                type='LoadMultiViewImageFromFiles',
+                data_config=dict(
+                    input_size=(384, 1408),
+                    resize=(0.0, 0.0),
+                    rot=(0.0, 0.0),
+                    flip=False,
+                    crop_h=(0.0, 0.0),
+                    resize_test=0.0),
+                load_stereo_depth=True,
+                is_train=True,
+                color_jitter=(0.4, 0.4, 0.4)),
+            dict(
+                type='CreateDepthFromLiDAR',
+                data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+                dataset='kitti360',
+                load_seg=False),
+            dict(
+                type='LoadAnnotationOcc',
+                bda_aug_conf=dict(
+                    rot_lim=(-22.5, 22.5),
+                    scale_lim=(0.95, 1.05),
+                    flip_dx_ratio=0.5,
+                    flip_dy_ratio=0.5,
+                    flip_dz_ratio=0),
+                apply_bda=False,
+                is_train=True,
+                point_cloud_range=[0, -25.6, -2, 51.2, 25.6, 4.4]),
+            dict(
+                type='CollectData',
+                keys=['img_inputs', 'gt_occ'],
+                meta_keys=[
+                    'pc_range', 'occ_size', 'raw_img', 'stereo_depth',
+                    'focal_length', 'baseline', 'img_shape', 'gt_depths'
+                ])
+        ],
+        split='train',
+        camera_used=['left'],
+        occ_size=[256, 256, 32],
+        pc_range=[0, -25.6, -2, 51.2, 25.6, 4.4],
+        test_mode=False),
+    val=dict(
+        type='KITTI360Dataset',
+        stereo_depth_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360/depth',
+        data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+        ann_file='/mnt/vita/scratch/datasets/SSCBenchKITTI360/labels',
+        pipeline=[
+            dict(
+                type='LoadMultiViewImageFromFiles',
+                data_config=dict(
+                    input_size=(384, 1408),
+                    resize=(0.0, 0.0),
+                    rot=(0.0, 0.0),
+                    flip=False,
+                    crop_h=(0.0, 0.0),
+                    resize_test=0.0),
+                load_stereo_depth=True,
+                is_train=False,
+                color_jitter=None),
+            dict(
+                type='CreateDepthFromLiDAR',
+                data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+                dataset='kitti360'),
+            dict(
+                type='LoadAnnotationOcc',
+                bda_aug_conf=dict(
+                    rot_lim=(-22.5, 22.5),
+                    scale_lim=(0.95, 1.05),
+                    flip_dx_ratio=0.5,
+                    flip_dy_ratio=0.5,
+                    flip_dz_ratio=0),
+                apply_bda=False,
+                is_train=False,
+                point_cloud_range=[0, -25.6, -2, 51.2, 25.6, 4.4]),
+            dict(
+                type='CollectData',
+                keys=['img_inputs', 'gt_occ'],
+                meta_keys=[
+                    'pc_range', 'occ_size', 'sequence', 'frame_id', 'raw_img',
+                    'stereo_depth', 'focal_length', 'baseline', 'img_shape',
+                    'gt_depths'
+                ])
+        ],
+        split='test',
+        camera_used=['left'],
+        occ_size=[256, 256, 32],
+        pc_range=[0, -25.6, -2, 51.2, 25.6, 4.4]),
+    test=dict(
+        type='KITTI360Dataset',
+        stereo_depth_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360/depth',
+        data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+        ann_file='/mnt/vita/scratch/datasets/SSCBenchKITTI360/labels',
+        pipeline=[
+            dict(
+                type='LoadMultiViewImageFromFiles',
+                data_config=dict(
+                    input_size=(384, 1408),
+                    resize=(0.0, 0.0),
+                    rot=(0.0, 0.0),
+                    flip=False,
+                    crop_h=(0.0, 0.0),
+                    resize_test=0.0),
+                load_stereo_depth=True,
+                is_train=False,
+                color_jitter=None),
+            dict(
+                type='CreateDepthFromLiDAR',
+                data_root='/mnt/vita/scratch/datasets/SSCBenchKITTI360',
+                dataset='kitti360'),
+            dict(
+                type='LoadAnnotationOcc',
+                bda_aug_conf=dict(
+                    rot_lim=(-22.5, 22.5),
+                    scale_lim=(0.95, 1.05),
+                    flip_dx_ratio=0.5,
+                    flip_dy_ratio=0.5,
+                    flip_dz_ratio=0),
+                apply_bda=False,
+                is_train=False,
+                point_cloud_range=[0, -25.6, -2, 51.2, 25.6, 4.4]),
+            dict(
+                type='CollectData',
+                keys=['img_inputs', 'gt_occ'],
+                meta_keys=[
+                    'pc_range', 'occ_size', 'sequence', 'frame_id', 'raw_img',
+                    'stereo_depth', 'focal_length', 'baseline', 'img_shape',
+                    'gt_depths'
+                ])
+        ],
+        split='test',
+        camera_used=['left'],
+        occ_size=[256, 256, 32],
+        pc_range=[0, -25.6, -2, 51.2, 25.6, 4.4]))
+train_dataloader_config = dict(batch_size=4, num_workers=4)
+test_dataloader_config = dict(batch_size=1, num_workers=4)
+numC_Trans = 128
+lss_downsample = [2, 2, 2]
+voxel_out_channels = [128]
+norm_cfg = dict(type='GN', num_groups=32, requires_grad=True)
+voxel_x = 0.2
+voxel_y = 0.2
+voxel_z = 0.2
+grid_config = dict(
+    xbound=[0, 51.2, 0.4],
+    ybound=[-25.6, 25.6, 0.4],
+    zbound=[-2, 4.4, 0.4],
+    dbound=[2.0, 58.0, 0.5])
+_num_layers_cross_ = 3
+_num_points_cross_ = 8
+_num_levels_ = 1
+_num_cams_ = 1
+_dim_ = 128
+model = dict(
+    type='VoxDet',
+    use_gt_refine=False,
+    img_backbone=dict(
+        type='CustomResNet',
+        depth=50,
+        num_stages=4,
+        out_indices=(0, 1, 2, 3),
+        pretrained=True,
+        track_running_stats=True),
+    img_neck=dict(
+        type='SECONDFPN',
+        in_channels=[256, 512, 1024, 2048],
+        upsample_strides=[0.5, 1, 2, 4],
+        out_channels=[128, 128, 128, 128]),
+    depth_net=dict(
+        type='GeometryDepth_Net',
+        downsample=8,
+        numC_input=512,
+        numC_Trans=128,
+        cam_channels=33,
+        grid_config=dict(
+            xbound=[0, 51.2, 0.4],
+            ybound=[-25.6, 25.6, 0.4],
+            zbound=[-2, 4.4, 0.4],
+            dbound=[2.0, 58.0, 0.5]),
+        loss_depth_type='kld',
+        loss_depth_weight=0.0001),
+    img_view_transformer=dict(
+        type='LSSViewTransformer',
+        downsample=8,
+        grid_config=dict(
+            xbound=[0, 51.2, 0.4],
+            ybound=[-25.6, 25.6, 0.4],
+            zbound=[-2, 4.4, 0.4],
+            dbound=[2.0, 58.0, 0.5]),
+        data_config=dict(
+            input_size=(384, 1408),
+            resize=(0.0, 0.0),
+            rot=(0.0, 0.0),
+            flip=False,
+            crop_h=(0.0, 0.0),
+            resize_test=0.0)),
+    proposal_layer=dict(
+        type='VoxelProposalLayer',
+        point_cloud_range=[0, -25.6, -2, 51.2, 25.6, 4.4],
+        input_dimensions=[128, 128, 16],
+        data_config=dict(
+            input_size=(384, 1408),
+            resize=(0.0, 0.0),
+            rot=(0.0, 0.0),
+            flip=False,
+            crop_h=(0.0, 0.0),
+            resize_test=0.0),
+        init_cfg=None),
+    VoxFormer_head=dict(
+        type='VoxFormerHead_Tiny',
+        volume_h=128,
+        volume_w=128,
+        volume_z=16,
+        data_config=dict(
+            input_size=(384, 1408),
+            resize=(0.0, 0.0),
+            rot=(0.0, 0.0),
+            flip=False,
+            crop_h=(0.0, 0.0),
+            resize_test=0.0),
+        point_cloud_range=[0, -25.6, -2, 51.2, 25.6, 4.4],
+        embed_dims=128,
+        cross_transformer=dict(
+            type='PerceptionTransformer_DFA3D',
+            rotate_prev_bev=True,
+            use_shift=True,
+            embed_dims=128,
+            num_cams=1,
+            encoder=dict(
+                type='VoxFormerEncoder_DFA3D',
+                num_layers=3,
+                pc_range=[0, -25.6, -2, 51.2, 25.6, 4.4],
+                data_config=dict(
+                    input_size=(384, 1408),
+                    resize=(0.0, 0.0),
+                    rot=(0.0, 0.0),
+                    flip=False,
+                    crop_h=(0.0, 0.0),
+                    resize_test=0.0),
+                num_points_in_pillar=8,
+                return_intermediate=False,
+                transformerlayers=dict(
+                    type='VoxFormerLayer',
+                    attn_cfgs=[
+                        dict(
+                            type='DeformCrossAttention_DFA3D',
+                            pc_range=[0, -25.6, -2, 51.2, 25.6, 4.4],
+                            num_cams=1,
+                            deformable_attention=dict(
+                                type='MSDeformableAttention3D_DFA3D',
+                                embed_dims=128,
+                                num_points=8,
+                                num_levels=1),
+                            embed_dims=128)
+                    ],
+                    ffn_cfgs=dict(
+                        type='FFN',
+                        embed_dims=128,
+                        feedforward_channels=1024,
+                        num_fcs=2,
+                        ffn_drop=0.0,
+                        act_cfg=dict(type='ReLU', inplace=True)),
+                    feedforward_channels=256,
+                    ffn_dropout=0.1,
+                    operation_order=('cross_attn', 'norm', 'ffn', 'norm')))),
+        mlp_prior=True),
+    occ_encoder_backbone=dict(
+        type='Ident',
+        embed_dims=128,
+        local_aggregator=dict(
+            type='VoxelAggregatorDual',
+            local_encoder_backbone=dict(
+                type='CustomResNet3D',
+                numC_input=128,
+                num_layer=[2, 2, 2],
+                num_channels=[128, 128, 128],
+                stride=[1, 2, 2],
+                norm_cfg=dict(type='GN', num_groups=32, requires_grad=True),
+                drop_path_rate=0.3),
+            local_encoder_neck=dict(
+                type='SpatiallyDecoupledFPN',
+                share_fpn=False,
+                in_channels=[128, 128, 128],
+                out_channels=128,
+                start_level=0,
+                num_outs=3,
+                norm_cfg=dict(type='GN', num_groups=32, requires_grad=True),
+                conv_cfg=dict(type='Conv3d'),
+                act_cfg=dict(type='ReLU', inplace=True),
+                upsample_cfg=dict(mode='trilinear', align_corners=False)))),
+    pts_bbox_head_aux=dict(
+        type='OccHead',
+        in_channels=[128],
+        out_channel=19,
+        empty_idx=0,
+        num_level=1,
+        with_cp=True,
+        occ_size=[256, 256, 32],
+        loss_weight_cfg=dict(
+            loss_voxel_ce_weight=0.2,
+            loss_voxel_sem_scal_weight=0.2,
+            loss_voxel_geo_scal_weight=0.2),
+        conv_cfg=dict(type='Conv3d', bias=False),
+        norm_cfg=dict(type='GN', num_groups=32, requires_grad=True),
+        class_frequencies=[
+            2264087502, 20098728, 104972, 96297, 1149426, 4051087, 125103,
+            105540713, 16292249, 45297267, 14454132, 110397082, 6766219,
+            295883213, 50037503, 1561069, 406330, 30516166, 1950115
+        ]),
+    pts_bbox_head=dict(
+        type='VoxDetHead',
+        down_sampling_ratio=0.5,
+        balance_reg_loss='none',
+        box_down_sample='trilinear',
+        align_corners=False,
+        num_inst_layer=4,
+        use_bias=False,
+        isolation_scale=0,
+        pred_six_directions=True,
+        in_channels=[128],
+        out_channel=19,
+        empty_idx=0,
+        num_level=1,
+        with_cp=False,
+        occ_size=[256, 256, 32],
+        loss_weight_cfg=dict(
+            loss_voxel_ce_weight=4.0,
+            loss_voxel_sem_scal_weight=4.0,
+            loss_voxel_geo_scal_weight=4.0,
+            loss_voxel_ctr_weight=1.0),
+        conv_cfg=dict(type='Conv3d', bias=False),
+        norm_cfg=dict(type='GN', num_groups=32, requires_grad=True),
+        class_frequencies=[
+            2264087502, 20098728, 104972, 96297, 1149426, 4051087, 125103,
+            105540713, 16292249, 45297267, 14454132, 110397082, 6766219,
+            295883213, 50037503, 1561069, 406330, 30516166, 1950115
+        ]))
+learning_rate = 0.0002
+training_steps = 27000
+optimizer = dict(type='AdamW', lr=0.0002, weight_decay=0.01)
+lr_scheduler = dict(
+    type='OneCycleLR',
+    max_lr=0.0002,
+    total_steps=27010,
+    pct_start=0.05,
+    cycle_momentum=False,
+    anneal_strategy='cos',
+    interval='step',
+    frequency=1)
+optimizer_config = dict(grad_clip=dict(max_norm=20, norm_type=2))
+sync_bn = True
+load_from = '/mnt/vita/scratch/vita-students/users/wuli/code/VoxDet_dev/ckpt/preatrain_depth_model.ckpt'
+config_path = 'configs/voxdet-kitt360-r50-v2.py'
+ckpt_path = None
+seed = 42
+log_folder = 'exps/voxdet-kitt360-r50-v2'
+save_path = None
+test_mapping = False
+submit = False
+eval = False
+log_every_n_steps = 100
+check_val_every_n_epoch = 1
+pretrain = False
