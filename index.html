@@ -52,9 +52,9 @@
 
     /* 容器样式：代替原来的 rotating-cube */
     #voxel-container {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 20px;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px;
       /* 居中并与标题保持间距 */
     }
 
@@ -66,6 +66,10 @@
     }
 
     /* 页面其余样式（摘自原示例） */
+    body {
+      scroll-behavior: smooth;
+    }
+    
     .hero {
       padding: 2rem 1rem;
     }
@@ -99,18 +103,27 @@
 
     .publication-title {
       line-height: 1.2;
+      margin-bottom: 1.5rem;
     }
-.publication-title,
-.content p {
-  /* 推荐两者都加，防止任何长字符串溢出 */
-  word-wrap: break-word;      /* 旧写法，兼容性好 */
-  overflow-wrap: break-word;  /* 新写法 */
-  /* 也可以用： word-break: break-all; 
-     但是可能会把英文单词随意断开，通常不推荐 */
-}
+    
+    .publication-title,
+    .content p {
+      /* 推荐两者都加，防止任何长字符串溢出 */
+      word-wrap: break-word;      /* 旧写法，兼容性好 */
+      overflow-wrap: break-word;  /* 新写法 */
+      /* 也可以用： word-break: break-all; 
+         但是可能会把英文单词随意断开，通常不推荐 */
+    }
 
     .is-size-4 {
       font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .is-size-5 {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1rem;
     }
 
     .publication-authors .author-block {
@@ -133,66 +146,99 @@
       color: #fff;
       background: #333;
       text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      background: #555;
+      transform: translateY(-2px);
     }
 
     .button .icon {
       margin-right: 0.25em;
     }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .title.is-1 {
+        font-size: 1.5rem;
+      }
+      
+      .hero-body {
+        padding: 1rem 0.5rem;
+      }
+      
+      .is-size-4 {
+        font-size: 1.1rem;
+      }
+      
+      .publication-links .button {
+        display: block;
+        margin: 0.5rem auto;
+        width: 150px;
+      }
+    }
+
+    /* 图片优化 */
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* 列表样式优化 */
+    ul {
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* 段落间距优化 */
+    p {
+      margin-bottom: 1rem;
+    }
+
+    /* 链接样式优化 */
+    a {
+      text-decoration: none;
+      color: #007BFF;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    /* 区块引用样式 */
+    .highlight-box {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-left: 4px solid #007BFF;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* 图片容器优化 */
+    .image-container {
+      text-align: center;
+      margin: 0.5rem 0 2rem 0;
+    }
+
+    .image-container img {
+      transition: transform 0.3s ease;
+    }
+
+    .image-container img:hover {
+      transform: scale(1.02);
+    }
   </style>
-  </head>
 
   <body>
-    <!-- <section class="hero teaser">
-      <div class="hero-body" >
-        <div class="container is-max-desktop">
-          <div class="columns is-centered">
-            <div class="column has-text-centered">
-
-
-              <div id="voxel-container"></div>
-
-
-              <h1 class="title is-1 publication-title" style="">
-                <span style="color:#036bfc">V</span><span style="color:#3503fc">o</span><span
-                  style="color:#a200ff">x</span><span style="color:#e250ff">Det</span>: Rethinking 3D Semantic Scene
-                Completion as<br>Dense Object Detection
-              </h1>
-
-  
-              <div class="is-size-4 publication-authors">
-                <span class="author-block"><a href="https://wymancv.github.io/wuyang.github.io/">Wuyang
-                    Li</a><sup>1</sup>,</span>
-                <span class="author-block"><a href="#">Zhu Yu</a><sup>2</sup>,</span>
-                <span class="author-block"><a
-                    href="https://scholar.google.com/citations?user=UIhXQ64AAAAJ&hl=en">Alexandre
-                    Alahi</a><sup>1</sup>,</span>
-              </div>
-
-              <div class="is-size-5 publication-authors">
-                <span class="author-block"><sup>1</sup><a href="https://www.epfl.ch/labs/vita/">VITA@EPFL</a>,</span>
-                <span class="author-block"><sup>2</sup>Zhejiang University</span>
-              </div>
-
-              <div class="publication-links">
-                <span class="link-block">
-                  <a href="https://arxiv.org/abs/2506.04623" class="button">
-                    <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
-                  </a>
-                </span>
-                <span class="link-block">
-                  <a href="https://github.com/vita-epfl/VoxDet" class="button">
-                    <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
-                  </a>
-                </span>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
-
-
     <section class="hero teaser">
       <div class="container is-max-desktop">
         <div class="hero-body" style="text-align: center;">
@@ -201,10 +247,16 @@
                 <span style="color:#036bfc">V</span><span style="color:#3503fc">o</span><span
                   style="color:#a200ff">x</span><span style="color:#e250ff">Det</span>: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection
               </h1>
+          <!-- NeurIPS 2025 Spotlight Badge -->
+          <div style="margin-bottom: 20px;">
+            <span style="background-color: #dc3545; color: white; padding: 6px 12px; border-radius: 15px; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+              NeurIPS 2025 Spotlight
+            </span>
+          </div>
                         <div class="is-size-4 publication-authors">
                 <span class="author-block"><a href="https://wymancv.github.io/wuyang.github.io/">Wuyang
                     Li</a><sup>1</sup>,</span>
-                <span class="author-block"><a href="#">Zhu Yu</a><sup>2</sup>,</span>
+                <span class="author-block"><a href="https://scholar.google.com/citations?user=oP4-z_QAAAAJ&hl=en">Zhu Yu</a><sup>2</sup>,</span>
                 <span class="author-block"><a
                     href="https://scholar.google.com/citations?user=UIhXQ64AAAAJ&hl=en">Alexandre
                     Alahi</a><sup>1</sup>,</span>
@@ -242,13 +294,13 @@
           <h2 class="title is-3">Too Long; Don't Read</h2>
           <div class="hero-body" style="text-align: left;">
             <p style="font-size: 18px;">
-              <strong>VoxDet</strong> address semantic occupancy prediction with an instance-centric formulation
-              inspried by dense object detection, which uses a Voxel-to-Instance (<strong>VoxNT</strong>) trick freely
+              <strong>VoxDet</strong> addresses semantic occupancy prediction with an instance-centric formulation
+              inspired by dense object detection, which uses a Voxel-to-Instance (<strong>VoxNT</strong>) trick freely
               transferring voxel-level class labels to instance-level offset labels.
             </p>
           </div>
-          <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <img src="./static/images/head.png" style="width:80%; height: auto; margin-top: -40px;" />
+          <div class="image-container">
+            <img src="./static/images/head.png" style="width:80%; height: auto;" />
           </div>
         </div>
       </div>
@@ -263,7 +315,7 @@
           <h2 class="title is-3">Key Features</h2>
           <div class="hero-body" style="text-align: left;">
             <p style="font-size: 18px;">
-            <ul style="text-align: left; margin: 0 auto; display: inline-block;font-size: 18px; ">
+            <ul style="text-align: left; margin: 0 auto; display: inline-block; font-size: 18px;">
               <li><strong>Versatile:</strong> Adaptable to various voxel-based scenarios, such as <a class="red-text">
                   camera and LiDAR</a> settings.</li>
               <li><strong>Powerful:</strong> Achieve <a class="red-text">joint state-of-the-art</a> on camera-based and
@@ -274,10 +326,9 @@
                 single-model & no extra
                 data/labels), securing <a class="red-text">1st</a> place on the online SemanticKITTI leaderboard.</li>
             </ul>
-            </p>
           </div>
-          <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <img src="./static/images/feature.png" style="width:80%; height: auto; margin-top: -40px;" />
+          <div class="image-container">
+            <img src="./static/images/feature.png" style="width:80%; height: auto;" />
           </div>
         </div>
       </div>
@@ -301,8 +352,8 @@
 
             </p>
           </div>
-          <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <img src="./static/images/motivation.png" style="width:80%; height: auto; margin-top: -40px;" />
+          <div class="image-container">
+            <img src="./static/images/motivation.png" style="width:80%; height: auto;" />
           </div>
         </div>
       </div>
@@ -320,8 +371,8 @@
               <br>
             </p>
           </div>
-          <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <img src="./static/images/VItrick.png" style="width:90%; height: auto; margin-top: -40px;" />
+          <div class="image-container">
+            <img src="./static/images/VItrick.png" style="width:90%; height: auto;" />
           </div>
         </div>
       </div>
@@ -343,8 +394,8 @@
               <br>
             </p>
           </div>
-          <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <img src="./static/images/overall.png" style="width:90%; height: auto; margin-top: -40px;" />
+          <div class="image-container">
+            <img src="./static/images/overall.png" style="width:90%; height: auto;" />
           </div>
         </div>
       </div>
@@ -364,8 +415,8 @@
             <!-- <br> -->
             </p>
           </div>
-          <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <img src="./static/images/comparison.png" style="width:90%; height: auto; margin-top: -40px;" />
+          <div class="image-container">
+            <img src="./static/images/comparison.png" style="width:90%; height: auto;" />
           </div>
         </div>
       </div>
@@ -387,16 +438,14 @@
               <br>
             </p>
           </div>
-          <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <img src="./static/images/semantickitti_camera.png" style="width:90%; height: auto; margin-top: -40px;" />
-
+          <div class="image-container">
+            <img src="./static/images/semantickitti_camera.png" style="width:90%; height: auto;" />
           </div>
-          <div style="display: flex; justify-content: center; margin-top: 0px;">
-            <img src="./static/images/kitti360.png" width="90%" />
+          <div class="image-container">
+            <img src="./static/images/kitti360.png" style="width:90%; height: auto;" />
           </div>
-
-          <div style="display: flex; justify-content: center; margin-top: 0px;">
-            <img src="./static/images/semantickitti_lidar.png" width="90%" />
+          <div class="image-container">
+            <img src="./static/images/semantickitti_lidar.png" style="width:90%; height: auto;" />
           </div>
 
         </div>
@@ -410,15 +459,14 @@
           <h2 class="title is-3">Model Efficiency & Monocular Adaptation</h2>
           <div class="hero-body" style="text-align: left;">
             <p style="font-size: 18px;">
-              <strong>VoxDet</strong> is highly effcienct (<strong>Left</strong>) regarding model parameters and
+              <strong>VoxDet</strong> is highly efficient (<strong>Left</strong>) regarding model parameters and
               inference speed. Besides, <strong>VoxDet</strong> achieves the best results using monocular depth
               (<strong>Right</strong>).
               <br>
             </p>
           </div>
-          <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <img src="./static/images/eff_mono.png" style="width:90%; height: auto; margin-top: -40px;" />
-
+          <div class="image-container">
+            <img src="./static/images/eff_mono.png" style="width:90%; height: auto;" />
           </div>
 
 
@@ -508,21 +556,19 @@
           <div class="hero-body" style="text-align: left;">
             <p style="font-size: 18px;">
               Thanks so much for the following fantastic projects that inspired us:
-            <ul style="text-align: left; margin: 0 auto; display: inline-block;font-size: 18px; ">
-
-              <li><strong>[FCOS]</strong> <a href="https://arxiv.org/abs/1904.01355">FCOS: Fully Convolutional One-Stage
-                  Object Detection</a></li>
-              <li><strong>[CGFormer]</strong> <a href="https://arxiv.org/abs/2405.13675">Context and Geometry Aware
-                  Voxel Transformer for Semantic Scene Completion</a></li>
-              <li><strong>[SIGMA]</strong> <a href="https://arxiv.org/abs/2203.06398">SIGMA: Semantic-complete Graph
-                  Matching For Domain Adaptive Object Detection</a></li>
-              <li><strong>[TSD]</strong> <a href="https://arxiv.org/abs/2003.07540">Revisiting the Sibling Head in
-                  Object Detector</a></li>
-              <li><strong>[VoxFormer]</strong> <a href="https://arxiv.org/abs/2302.12251">VoxFormer: a Cutting-edge
-                  Baseline for 3D Semantic Occupancy Prediction</a></li>
-
-            </ul>
             </p>
+            <ul style="text-align: left; margin: 0 auto; display: inline-block; font-size: 18px;">
+              <li><a href="https://arxiv.org/abs/1904.01355">FCOS: Fully Convolutional One-Stage
+                  Object Detection</a></li>
+              <li><a href="https://arxiv.org/abs/2405.13675">Context and Geometry Aware
+                  Voxel Transformer for Semantic Scene Completion</a></li>
+              <li> <a href="https://arxiv.org/abs/2203.06398">SIGMA: Semantic-complete Graph
+                  Matching For Domain Adaptive Object Detection</a></li>
+              <li><a href="https://arxiv.org/abs/2003.07540">Revisiting the Sibling Head in
+                  Object Detector</a></li>
+              <li> <a href="https://arxiv.org/abs/2302.12251">VoxFormer: a Cutting-edge
+                  Baseline for 3D Semantic Occupancy Prediction</a></li>
+            </ul>
           </div>
         </div>
       </div>
@@ -541,10 +587,10 @@
           <pre
             style="background-color: #f5f5f5; color: #2d2d2d; padding: 1rem; border-radius: 6px; font-size: 0.9rem; line-height: 1.4; overflow-x: auto; border: 1px solid #ddd; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); margin: 0;">
 <code id="bibtex-code">
-@article{li2025voxdet,
+@inproceedings{li2025voxdet,
   title={VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection},
   author={Li, Wuyang and Yu, Zhu and Alahi, Alexandre},
-  journal={arXiv preprint arXiv:2506.04623},
+  booktitle={Advances in Neural Information Processing Systems},
   year={2025}
 }
 </code>
@@ -561,22 +607,28 @@
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
+      // 等待DOM加载完成
+      document.addEventListener('DOMContentLoaded', function() {
+        // 容器与场景、相机、渲染器
+        const container = document.getElementById('voxel-container');
+        if (!container) {
+          console.error('voxel-container not found');
+          return;
+        }
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(
+          45,
+          container.clientWidth / container.clientHeight,
+          0.1,
+          1000
+        );
+        camera.position.set(100, 100, 140);
+        camera.lookAt(0, 0, 0);
 
-      // 容器与场景、相机、渲染器
-      const container = document.getElementById('voxel-container');
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(
-        45,
-        container.clientWidth / container.clientHeight,
-        0.1,
-        1000
-      );
-      camera.position.set(100, 100, 140);
-      camera.lookAt(0, 0, 0);
-
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      container.appendChild(renderer.domElement);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
 
       // 灯光
       scene.add(new THREE.AmbientLight(0xffffff, 0.6));
@@ -673,30 +725,42 @@
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
       });
+      
+      }); // 结束Three.js的DOMContentLoaded事件监听器
 
-
-      // 获取代码块和按钮
-      const copyButton = document.getElementById("copy-button");
-      const bibtexCode = document.getElementById("bibtex-code").innerText;
-
-      // 添加点击事件
-      copyButton.addEventListener("click", () => {
-        // 将代码复制到剪贴板
-        navigator.clipboard.writeText(bibtexCode).then(() => {
-          // 显示反馈文本
-          copyButton.textContent = "Copied!";
-          // 2秒后恢复为 "Copy"
-          setTimeout(() => {
-            copyButton.textContent = "Copy";
-          }, 2000);
-        }).catch((err) => {
-          console.error("Failed to copy text: ", err);
+      // 复制按钮功能
+      document.addEventListener('DOMContentLoaded', function() {
+        const copyButton = document.getElementById("copy-button");
+        if (!copyButton) return;
+        
+        copyButton.addEventListener("click", () => {
+          const bibtexCode = document.getElementById("bibtex-code").innerText.trim();
+          
+          navigator.clipboard.writeText(bibtexCode).then(() => {
+            const originalText = copyButton.textContent;
+            copyButton.textContent = "Copied!";
+            copyButton.style.backgroundColor = "#28a745";
+            
+            setTimeout(() => {
+              copyButton.textContent = originalText;
+              copyButton.style.backgroundColor = "#007BFF";
+            }, 2000);
+          }).catch((err) => {
+            console.error("Failed to copy text: ", err);
+            const textArea = document.createElement('textarea');
+            textArea.value = bibtexCode;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            copyButton.textContent = "Copied!";
+            setTimeout(() => {
+              copyButton.textContent = "Copy";
+            }, 2000);
+          });
         });
       });
     </script>
   </body>
-
-</html>
-</body>
-
 </html>
