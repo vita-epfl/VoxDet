@@ -148,7 +148,7 @@ Note that after using naive temporal fusion, VoxDet is able to achieve 20+ mIoU 
 We provide pretrained models for different configurations. We provide all reproduced information (models, configs, logs, everything) after the code cleaning [onedrive](https://1drv.ms/f/c/350a4d1d810f5398/EqJI_DVDJ9BLt8hvOC-mRxwBDGonkOBiPRsgL7oFmHvxWQ?e=wbP2Ti). I did not test them on test set. So the performance might be slightly higer/lower than the paper, but should be very similar according to the tensorboard log.
 
 | Method | Dataset | Modality | IoU | mIoU | Config  |
-|--------|---------|----------|------|------------|--------|----------|
+|--------|---------|----------|------|------------|--------|
 | VoxDet | SemanticKITTI | Camera | 47.81 | 18.67 | [config](configs/voxdet-semantickitti-cam.py)   |
 | VoxDet | SemanticKITTI | LiDAR | 63.0 | 26.0 | [config](configs/voxdet-semnatickitti-lidar.py)  |
 | VoxDet | KITTI-360 | Camera | 48.59 | 21.40 | [config](configs/voxdet-kitt360-cam.py) |
