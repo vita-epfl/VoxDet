@@ -145,7 +145,9 @@ python main.py \
 
 Note that after using naive temporal fusion, VoxDet is able to achieve 20+ mIoU on SemanticKITTI test set (see logs folder).
 
-We provide pretrained models for different configurations. We provide all reproduced information (models, configs, logs, everything) after the code cleaning [onedrive](https://1drv.ms/f/c/350a4d1d810f5398/EqJI_DVDJ9BLt8hvOC-mRxwBDGonkOBiPRsgL7oFmHvxWQ?e=wbP2Ti). I did not test them on test set. So the performance might be slightly higer/lower than the paper, but should be very similar according to the tensorboard log.
+We provide all reproduced information (models, configs, logs, everything) after the code cleaning [onedrive](https://1drv.ms/f/c/350a4d1d810f5398/EqJI_DVDJ9BLt8hvOC-mRxwBDGonkOBiPRsgL7oFmHvxWQ?e=wbP2Ti). I did not test them on test set. So the performance might be slightly higer/lower than the paper, but should be very similar according to the tensorboard log.
+
+We provide pretrained models for different configurations (Test set). 
 
 | Method | Dataset | Modality | IoU | mIoU | Config  |
 |--------|---------|----------|------|------------|--------|
@@ -185,7 +187,7 @@ VoxDet (blue curve) is significantly more efficient and effective than the previ
 
 - [x] Release the arXiv paper
 - [x] Release the unified codebase, including both camera-based and LiDAR-based implementations
-- [ ] Release all models
+- [x] Release all models
 
 ## 📚 Citation
 
