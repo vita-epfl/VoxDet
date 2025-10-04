@@ -32,7 +32,7 @@ Note that VoxDet is a single-frame single-model method without extra data and la
 ## 🔧 Installation 
 
 
-Please refer to [docs/dataset.md](docs/install.md) for detailed. This work is built on the CGFormer codebase. The installation, data preparation, training, and inference are consistent with CGFormer. If something is missing, you can check that codebase :)
+Please refer to [docs/install.md](docs/install.md) for detailed. This work is built on the CGFormer codebase. The installation, data preparation, training, and inference are consistent with CGFormer. If something is missing, you can check that codebase :)
 
 
 ## 📦 Dataset Preparation
@@ -140,7 +140,7 @@ python main.py \
 --test_mapping
 ```
 
-## 🎯 Model Zoo (Coming Soon)
+## 🎯 Model Zoo
 
 
 Note that after using naive temporal fusion, VoxDet is able to achieve 20+ mIoU on SemanticKITTI test set (see logs folder).
