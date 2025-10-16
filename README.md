@@ -28,7 +28,6 @@ Note that VoxDet is a single-frame single-model method without extra data and la
     <img width="100%" alt="VoxDet overview" src="assets/leaderboard.png"/>
 </div>
 
-
 ## 🔧 Installation 
 
 
