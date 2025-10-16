@@ -1,8 +1,7 @@
-
-data_root = '/mnt/vita/scratch/vita-students/users/wuli/data/KITTI/dataset/'
-ann_file = '/mnt/vita/scratch/vita-students/users/wuli/data/KITTI/dataset/labels/'
-stereo_depth_root = '/mnt/vita/scratch/vita-students/users/wuli/data/KITTI/depth/'
-seg_label_root = '/mnt/vita/scratch/vita-students/users/wuli/data/KITTI/dataset/lidarseg/'
+data_root = '/mnt/vita/scratch/datasets/SemanticKITTI/dataset/'
+ann_file = '/mnt/vita/scratch/datasets/SemanticKITTI/dataset/labels/'
+stereo_depth_root = '/mnt/vita/scratch/datasets/SemanticKITTI/depth/'
+seg_label_root = '/mnt/vita/scratch/datasets/SemanticKITTI/lidarseg/'
 
 camera_used = ['left']
 
