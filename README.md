@@ -7,6 +7,10 @@
 > [**VoxDet: Rethinking 3D Semantic Occupancy Prediction as Dense Object Detection**](https://arxiv.org/abs/2506.04623) <br>
 > [Wuyang Li <sup>1 </sup>](https://wymancv.github.io/wuyang.github.io/), [Zhu Yu <sup>2 </sup>](https://scholar.google.com/citations?user=oP4-z_QAAAAJ&hl=en), [Alexandre Alahi <sup>1 </sup>](https://scholar.google.com/citations?user=UIhXQ64AAAAJ&hl=en) <br><sup>1 </sup> École Polytechnique Fédérale de Lausanne (EPFL); <sup>2 </sup> Zhejiang University
 
+## 🔥 News
+
+- **[2026.06]** Our latest CVPR 2026 work, [**Deformable Gaussian Occupancy (DeGO)**](https://github.com/vita-epfl/DeGO), is now available. Check out the [paper](https://arxiv.org/abs/2605.28587) and repository for a new deformable Gaussian occupancy framework.
+
 <div align="center">
     <img width="100%" alt="VoxDet overview" src="assets/introduction.png"/>
 </div>
